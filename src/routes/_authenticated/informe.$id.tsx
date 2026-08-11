@@ -35,9 +35,8 @@ import {
 } from "@/lib/domain";
 
 export const Route = createFileRoute("/_authenticated/informe/$id")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    export: search["export"] === true || search["export"] === "true" ? true : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { export?: true } =>
+    search["export"] === true || search["export"] === "true" ? { export: true } : {},
   head: () => ({
     meta: [
       { title: "Editar informe | Informe de Turno" },
