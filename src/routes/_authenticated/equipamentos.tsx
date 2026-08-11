@@ -148,8 +148,10 @@ function EquipamentosPage() {
       if (index < 0 || target < 0 || target >= list.length) return;
       const a = list[index];
       const b = list[target];
+      if (!a || !b) return;
       await supabase.from("equipments").update({ display_order: b.display_order }).eq("id", a.id);
       await supabase.from("equipments").update({ display_order: a.display_order }).eq("id", b.id);
+
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["equipments"] }),
   });
