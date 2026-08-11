@@ -53,6 +53,7 @@ type SaveState = "idle" | "saving" | "saved" | "error";
 
 interface Line {
   id: string;
+  equipment_id: string | null;
   code: string;
   name: string;
   type_prefix: string;
