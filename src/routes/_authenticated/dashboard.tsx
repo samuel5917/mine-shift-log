@@ -119,13 +119,18 @@ function Dashboard() {
         </p>
       ) : null}
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <Button variant="outline" className="h-14 justify-start" onClick={() => newReport.mutate()}>
           <FilePlus2 size={18} /> Novo informe
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>
           <Link to="/informes">
             <ClipboardList size={18} /> Meus informes
+          </Link>
+        </Button>
+        <Button variant="outline" className="h-14 justify-start" asChild>
+          <Link to="/assistente">
+            <Wand2 size={18} /> Assistente do turno
           </Link>
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>
