@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { FilePlus2, ClipboardList, Wrench, Settings, ArrowRight } from "lucide-react";
+import { FilePlus2, ClipboardList, Wrench, Settings, ArrowRight, Wand2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { SITUATION_LABEL, SITUATION_UI_CLASS, SHIFT_LABEL, formatDateBR, todayISO, type Situation } from "@/lib/domain";
