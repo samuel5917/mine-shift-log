@@ -1,7 +1,7 @@
 import { type ReactNode, useState } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, ClipboardList, Wrench, Settings, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, ClipboardList, Wrench, Settings, LogOut, Menu, X, Wand2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/trindade-logo.png";
@@ -9,6 +9,7 @@ import logo from "@/assets/trindade-logo.png";
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/informes", label: "Meus Informes", icon: ClipboardList },
+  { to: "/assistente", label: "Assistente do Turno", icon: Wand2 },
   { to: "/equipamentos", label: "Equipamentos", icon: Wrench },
   { to: "/configuracoes", label: "Configurações", icon: Settings },
 ] as const;
