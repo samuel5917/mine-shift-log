@@ -213,8 +213,8 @@ export function movimentacaoTexto(m: MovimentacaoEntry): string {
 
 export function duracaoParada(inicio: string, fim: string): string | null {
   if (!inicio || !fim) return null;
-  const [hi, mi] = inicio.split(":").map(Number);
-  const [hf, mf] = fim.split(":").map(Number);
+  const [hi = NaN, mi = NaN] = inicio.split(":").map(Number);
+  const [hf = NaN, mf = NaN] = fim.split(":").map(Number);
   if ([hi, mi, hf, mf].some((n) => Number.isNaN(n))) return null;
   let mins = hf * 60 + mf - (hi * 60 + mi);
   if (mins < 0) mins += 24 * 60;
