@@ -282,7 +282,9 @@ function Assistente() {
                 selected={b.planta02.status02 ? [b.planta02.status02] : []}
                 onToggle={(v) =>
                   updatePlanta(b.id, "planta02", {
-                    status02: (b.planta02.status02 === v ? "" : v) as PlantaEntry["status02"],
+                    status02: (b.planta02.status02 === v ? "" : v) as NonNullable<
+                      PlantaEntry["status02"]
+                    >,
                   })
                 }
               />
