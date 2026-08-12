@@ -53,8 +53,8 @@ function frase(motivo: string, outro: string) {
 function joinList(items: string[]) {
   const list = items.filter(Boolean);
   if (list.length === 0) return "";
-  if (list.length === 1) return list[0];
-  return `${list.slice(0, -1).join(", ")} e ${list[list.length - 1]}`;
+  if (list.length === 1) return list[0] ?? "";
+  return `${list.slice(0, -1).join(", ")} e ${list[list.length - 1] ?? ""}`;
 }
 
 function motivosTexto(motivos: string[], outro: string) {
