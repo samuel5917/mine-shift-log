@@ -16,12 +16,12 @@ export function ExpandableCard({
   confirmMessage = "Tem certeza que deseja excluir este item?",
 }: {
   title: string;
-  summary?: string;
+  summary?: string | undefined;
   open: boolean;
   onToggle: () => void;
-  onDelete?: () => void;
+  onDelete?: (() => void) | undefined;
   children: ReactNode;
-  confirmMessage?: string;
+  confirmMessage?: string | undefined;
 }) {
   return (
     <div
@@ -90,11 +90,11 @@ export function CollapsibleSection({
   badge,
 }: {
   title: string;
-  description?: string;
-  action?: ReactNode;
+  description?: string | undefined;
+  action?: ReactNode | undefined;
   children: ReactNode;
-  defaultOpen?: boolean;
-  badge?: string | number;
+  defaultOpen?: boolean | undefined;
+  badge?: string | number | undefined;
 }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
