@@ -420,7 +420,11 @@ function Assistente() {
         action={
           <Button
             size="sm"
-            onClick={() => patch({ movimentacoes: [...state.movimentacoes, emptyMovimentacao()] })}
+            onClick={() => {
+              const x = emptyMovimentacao();
+              patch({ movimentacoes: [...state.movimentacoes, x] });
+              setOpenMov(x.id);
+            }}
           >
             <Plus size={14} /> Adicionar movimentação
           </Button>
@@ -429,33 +433,37 @@ function Assistente() {
         {state.movimentacoes.length === 0 ? (
           <p className="text-sm text-muted-foreground">Nenhuma movimentação adicionada.</p>
         ) : null}
-        {state.movimentacoes.map((m) => {
+        {state.movimentacoes.map((m, idx) => {
           const up = (u: Partial<typeof m>) =>
             patch({
               movimentacoes: state.movimentacoes.map((x) => (x.id === m.id ? { ...x, ...u } : x)),
             });
+          const titulo =
+            m.origem || m.destino
+              ? `${m.tipo || "Movimentação"} ${m.origem}${m.destino ? ` → ${m.destino}` : ""}`.trim()
+              : m.tipo || `Movimentação ${String(idx + 1).padStart(2, "0")}`;
           return (
-            <div key={m.id} className="space-y-3 rounded-md border p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1">
-                  <Choice
-                    label="Tipo"
-                    value={m.tipo}
-                    onChange={(v) => up({ tipo: v })}
-                    options={TIPOS_MOVIMENTACAO}
-                  />
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Remover movimentação"
-                  onClick={() =>
-                    patch({ movimentacoes: state.movimentacoes.filter((x) => x.id !== m.id) })
-                  }
-                >
-                  <Trash2 size={16} />
-                </Button>
-              </div>
+            <ExpandableCard
+              key={m.id}
+              title={titulo}
+              summary={joinSummary(
+                m.material,
+                m.quantidade ? `${m.quantidade} ${m.unidade.toLowerCase()}` : undefined,
+                m.finalidade,
+              )}
+              open={openMov === m.id}
+              onToggle={() => toggleOpen(openMov, setOpenMov)(m.id)}
+              onDelete={() => {
+                patch({ movimentacoes: state.movimentacoes.filter((x) => x.id !== m.id) });
+                setOpenMov(null);
+              }}
+            >
+              <Choice
+                label="Tipo"
+                value={m.tipo}
+                onChange={(v) => up({ tipo: v })}
+                options={TIPOS_MOVIMENTACAO}
+              />
               <div className="grid gap-3 sm:grid-cols-2">
                 <Field label="Origem">
                   <Input
@@ -500,7 +508,7 @@ function Assistente() {
               <Field label="Observação">
                 <Input value={m.observacao} onChange={(e) => up({ observacao: e.target.value })} />
               </Field>
-            </div>
+            </ExpandableCard>
           );
         })}
       </SectionCard>
@@ -509,7 +517,14 @@ function Assistente() {
       <SectionCard
         title="Paradas operacionais"
         action={
-          <Button size="sm" onClick={() => patch({ paradas: [...state.paradas, emptyParada()] })}>
+          <Button
+            size="sm"
+            onClick={() => {
+              const x = emptyParada();
+              patch({ paradas: [...state.paradas, x] });
+              setOpenParada(x.id);
+            }}
+          >
             <Plus size={14} /> Adicionar parada
           </Button>
         }
@@ -517,30 +532,32 @@ function Assistente() {
         {state.paradas.length === 0 ? (
           <p className="text-sm text-muted-foreground">Nenhuma parada registrada.</p>
         ) : null}
-        {state.paradas.map((p) => {
+        {state.paradas.map((p, idx) => {
           const up = (u: Partial<typeof p>) =>
             patch({ paradas: state.paradas.map((x) => (x.id === p.id ? { ...x, ...u } : x)) });
           const dur = duracaoParada(p.inicio, p.fim);
           return (
-            <div key={p.id} className="space-y-3 rounded-md border p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1">
-                  <Choice
-                    label="Local"
-                    value={p.local}
-                    onChange={(v) => up({ local: v })}
-                    options={LOCAIS_PARADA}
-                  />
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Remover parada"
-                  onClick={() => patch({ paradas: state.paradas.filter((x) => x.id !== p.id) })}
-                >
-                  <Trash2 size={16} />
-                </Button>
-              </div>
+            <ExpandableCard
+              key={p.id}
+              title={`Parada ${String(idx + 1).padStart(2, "0")}`}
+              summary={joinSummary(
+                p.localOutro || p.local,
+                p.inicio && p.fim ? `${p.inicio}–${p.fim}` : p.inicio || p.fim,
+                p.motivo === "Outro" ? p.motivoOutro : p.motivo,
+              )}
+              open={openParada === p.id}
+              onToggle={() => toggleOpen(openParada, setOpenParada)(p.id)}
+              onDelete={() => {
+                patch({ paradas: state.paradas.filter((x) => x.id !== p.id) });
+                setOpenParada(null);
+              }}
+            >
+              <Choice
+                label="Local"
+                value={p.local}
+                onChange={(v) => up({ local: v })}
+                options={LOCAIS_PARADA}
+              />
               {p.local === "Outro" || p.local === "Banco" ? (
                 <Field label={p.local === "Banco" ? "Qual banco?" : "Qual local?"}>
                   <Input
@@ -577,7 +594,7 @@ function Assistente() {
               <Field label="Observação">
                 <Input value={p.observacao} onChange={(e) => up({ observacao: e.target.value })} />
               </Field>
-            </div>
+            </ExpandableCard>
           );
         })}
       </SectionCard>
@@ -611,8 +628,17 @@ function Assistente() {
               impactos: state.impactos.map((x) => (x.nome === i.nome ? { ...x, ...u } : x)),
             });
           return (
-            <div key={i.nome} className="space-y-3 rounded-md border p-3">
-              <p className="text-sm font-semibold text-card-foreground">{i.nome}</p>
+            <ExpandableCard
+              key={i.nome}
+              title={i.nome}
+              summary={joinSummary(i.descricaoOutro, i.alvo, i.horario, i.duracao)}
+              open={openImpacto === i.nome}
+              onToggle={() => toggleOpen(openImpacto, setOpenImpacto)(i.nome)}
+              onDelete={() => {
+                patch({ impactos: state.impactos.filter((x) => x.nome !== i.nome) });
+                setOpenImpacto(null);
+              }}
+            >
               {i.nome === "Outro" ? (
                 <Input
                   value={i.descricaoOutro}
@@ -634,7 +660,7 @@ function Assistente() {
               <Field label="Observação">
                 <Input value={i.observacao} onChange={(e) => up({ observacao: e.target.value })} />
               </Field>
-            </div>
+            </ExpandableCard>
           );
         })}
       </SectionCard>
@@ -645,11 +671,11 @@ function Assistente() {
         action={
           <Button
             size="sm"
-            onClick={() =>
-              patch({
-                observacoes: [...state.observacoes, { id: newId(), categoria: "", texto: "" }],
-              })
-            }
+            onClick={() => {
+              const x = { id: newId(), categoria: "", texto: "" };
+              patch({ observacoes: [...state.observacoes, x] });
+              setOpenObs(x.id);
+            }}
           >
             <Plus size={14} /> Adicionar observação
           </Button>
@@ -658,33 +684,29 @@ function Assistente() {
         {state.observacoes.length === 0 ? (
           <p className="text-sm text-muted-foreground">Nenhuma observação registrada.</p>
         ) : null}
-        {state.observacoes.map((o) => {
+        {state.observacoes.map((o, idx) => {
           const up = (u: Partial<typeof o>) =>
             patch({
               observacoes: state.observacoes.map((x) => (x.id === o.id ? { ...x, ...u } : x)),
             });
           return (
-            <div key={o.id} className="space-y-3 rounded-md border p-3">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1">
-                  <Choice
-                    label="Categoria"
-                    value={o.categoria}
-                    onChange={(v) => up({ categoria: v })}
-                    options={CATEGORIAS_OBSERVACAO}
-                  />
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Remover observação"
-                  onClick={() =>
-                    patch({ observacoes: state.observacoes.filter((x) => x.id !== o.id) })
-                  }
-                >
-                  <Trash2 size={16} />
-                </Button>
-              </div>
+            <ExpandableCard
+              key={o.id}
+              title={`Observação ${String(idx + 1).padStart(2, "0")}`}
+              summary={joinSummary(o.categoria, o.texto)}
+              open={openObs === o.id}
+              onToggle={() => toggleOpen(openObs, setOpenObs)(o.id)}
+              onDelete={() => {
+                patch({ observacoes: state.observacoes.filter((x) => x.id !== o.id) });
+                setOpenObs(null);
+              }}
+            >
+              <Choice
+                label="Categoria"
+                value={o.categoria}
+                onChange={(v) => up({ categoria: v })}
+                options={CATEGORIAS_OBSERVACAO}
+              />
               <Field label="Informação">
                 <Textarea
                   value={o.texto}
@@ -693,7 +715,7 @@ function Assistente() {
                   rows={2}
                 />
               </Field>
-            </div>
+            </ExpandableCard>
           );
         })}
       </SectionCard>
@@ -706,11 +728,11 @@ function Assistente() {
           <Button
             size="sm"
             variant="outline"
-            onClick={() =>
-              patch({
-                modelos: [...state.modelos, { id: newId(), nome: "", situacao: "", texto: "" }],
-              })
-            }
+            onClick={() => {
+              const x = { id: newId(), nome: "", situacao: "", texto: "" };
+              patch({ modelos: [...state.modelos, x] });
+              setOpenModelo(x.id);
+            }}
           >
             <BookmarkPlus size={14} /> Adicionar modelo
           </Button>
@@ -720,7 +742,17 @@ function Assistente() {
           const up = (u: Partial<typeof mo>) =>
             patch({ modelos: state.modelos.map((x) => (x.id === mo.id ? { ...x, ...u } : x)) });
           return (
-            <div key={mo.id} className="space-y-3 rounded-md border p-3">
+            <ExpandableCard
+              key={mo.id}
+              title={mo.nome.trim() || "Modelo de frase"}
+              summary={joinSummary(mo.situacao, mo.texto)}
+              open={openModelo === mo.id}
+              onToggle={() => toggleOpen(openModelo, setOpenModelo)(mo.id)}
+              onDelete={() => {
+                patch({ modelos: state.modelos.filter((x) => x.id !== mo.id) });
+                setOpenModelo(null);
+              }}
+            >
               <div className="grid gap-3 sm:grid-cols-2">
                 <Field label="Nome do modelo">
                   <Input value={mo.nome} onChange={(e) => up({ nome: e.target.value })} />
@@ -732,17 +764,8 @@ function Assistente() {
               <Field label="Texto padrão">
                 <Textarea value={mo.texto} onChange={(e) => up({ texto: e.target.value })} rows={2} />
               </Field>
-              <div className="flex gap-2">
-                <CopyButton text={mo.texto} />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => patch({ modelos: state.modelos.filter((x) => x.id !== mo.id) })}
-                >
-                  <Trash2 size={14} /> Remover
-                </Button>
-              </div>
-            </div>
+              <CopyButton text={mo.texto} />
+            </ExpandableCard>
           );
         })}
       </SectionCard>
