@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Choice, CopyButton, Field, SectionCard, ToggleChips } from "@/components/assistente/ui";
+import { ExpandableCard, joinSummary } from "@/components/ui/expandable-card";
 import {
   BANCOS,
   CATEGORIAS_OBSERVACAO,
@@ -72,6 +73,16 @@ function Assistente() {
   const [hydrated, setHydrated] = useState(false);
   const [quick, setQuick] = useState("");
   const [gerado, setGerado] = useState(false);
+  const [openBanco, setOpenBanco] = useState<string | null>(null);
+  const [openMov, setOpenMov] = useState<string | null>(null);
+  const [openParada, setOpenParada] = useState<string | null>(null);
+  const [openImpacto, setOpenImpacto] = useState<string | null>(null);
+  const [openObs, setOpenObs] = useState<string | null>(null);
+  const [openModelo, setOpenModelo] = useState<string | null>(null);
+
+  const toggleOpen =
+    (current: string | null, set: (v: string | null) => void) => (id: string) =>
+      set(current === id ? null : id);
 
   useEffect(() => {
     setState(loadState());
@@ -111,8 +122,10 @@ function Assistente() {
     }
     if (res.kind === "banco" && res.banco) {
       patch({ bancos: [...state.bancos, res.banco] });
+      setOpenBanco(res.banco.id);
     } else if (res.movimentacao) {
       patch({ movimentacoes: [...state.movimentacoes, res.movimentacao] });
+      setOpenMov(res.movimentacao.id);
     }
     setQuick("");
     toast.success(
@@ -135,7 +148,11 @@ function Assistente() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => patch({ bancos: [...state.bancos, emptyBanco()] })}
+            onClick={() => {
+              const b = emptyBanco();
+              patch({ bancos: [...state.bancos, b] });
+              setOpenBanco(b.id);
+            }}
           >
             <Zap size={14} /> Blend não atendido
           </Button>
@@ -146,6 +163,7 @@ function Assistente() {
               const b = emptyBanco();
               b.planta01.movimentacao = "sem";
               patch({ bancos: [...state.bancos, b] });
+              setOpenBanco(b.id);
             }}
           >
             <Zap size={14} /> Sem movimentação
@@ -153,16 +171,22 @@ function Assistente() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => patch({ paradas: [...state.paradas, emptyParada()] })}
+            onClick={() => {
+              const x = emptyParada();
+              patch({ paradas: [...state.paradas, x] });
+              setOpenParada(x.id);
+            }}
           >
             <Zap size={14} /> Parada
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() =>
-              patch({ movimentacoes: [...state.movimentacoes, emptyMovimentacao("Estoque")] })
-            }
+            onClick={() => {
+              const x = emptyMovimentacao("Estoque");
+              patch({ movimentacoes: [...state.movimentacoes, x] });
+              setOpenMov(x.id);
+            }}
           >
             <Zap size={14} /> Estoque
           </Button>
@@ -193,7 +217,14 @@ function Assistente() {
       <SectionCard
         title="Justificativa do Blend"
         action={
-          <Button size="sm" onClick={() => patch({ bancos: [...state.bancos, emptyBanco()] })}>
+          <Button
+            size="sm"
+            onClick={() => {
+              const b = emptyBanco();
+              patch({ bancos: [...state.bancos, b] });
+              setOpenBanco(b.id);
+            }}
+          >
             <Plus size={14} /> Adicionar banco
           </Button>
         }
@@ -201,28 +232,33 @@ function Assistente() {
         {state.bancos.length === 0 ? (
           <p className="text-sm text-muted-foreground">Nenhum banco adicionado.</p>
         ) : null}
-        {state.bancos.map((b) => (
-          <div key={b.id} className="space-y-4 rounded-md border p-4">
-            <div className="flex items-end gap-3">
-              <div className="flex-1">
-                <Field label="Banco">
-                  <Input
-                    list="lista-bancos"
-                    value={b.banco}
-                    onChange={(e) => updateBanco(b.id, { banco: e.target.value })}
-                    placeholder="B-1120"
-                  />
-                </Field>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label="Remover banco"
-                onClick={() => patch({ bancos: state.bancos.filter((x) => x.id !== b.id) })}
-              >
-                <Trash2 size={16} />
-              </Button>
-            </div>
+        {state.bancos.map((b, idx) => (
+          <ExpandableCard
+            key={b.id}
+            title={b.banco.trim() || `Banco ${String(idx + 1).padStart(2, "0")}`}
+            summary={joinSummary(
+              b.planta02.status02 || undefined,
+              b.planta02.programadas && b.planta02.realizadas
+                ? `${b.planta02.realizadas}/${b.planta02.programadas} viagens`
+                : undefined,
+              b.planta02.motivosNaoAtendimento[0],
+            )}
+            open={openBanco === b.id}
+            onToggle={() => toggleOpen(openBanco, setOpenBanco)(b.id)}
+            onDelete={() => {
+              patch({ bancos: state.bancos.filter((x) => x.id !== b.id) });
+              setOpenBanco(null);
+            }}
+          >
+            <Field label="Banco">
+              <Input
+                autoFocus
+                list="lista-bancos"
+                value={b.banco}
+                onChange={(e) => updateBanco(b.id, { banco: e.target.value })}
+                placeholder="B-1120"
+              />
+            </Field>
 
             {/* Planta 01 */}
             <div className="space-y-3 rounded-md bg-muted/40 p-3">
@@ -369,7 +405,7 @@ function Assistente() {
                 </>
               ) : null}
             </div>
-          </div>
+          </ExpandableCard>
         ))}
         <datalist id="lista-bancos">
           {BANCOS.map((b) => (
