@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { FilePlus2, ClipboardList, Wrench, Settings, ArrowRight, Wand2 } from "lucide-react";
+import { FilePlus2, ClipboardList, Wrench, Settings, ArrowRight, Wand2, FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { SITUATION_LABEL, SITUATION_UI_CLASS, SHIFT_LABEL, formatDateBR, todayISO, type Situation } from "@/lib/domain";
@@ -119,7 +119,7 @@ function Dashboard() {
         </p>
       ) : null}
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <Button variant="outline" className="h-14 justify-start" onClick={() => newReport.mutate()}>
           <FilePlus2 size={18} /> Novo informe
         </Button>
@@ -131,6 +131,11 @@ function Dashboard() {
         <Button variant="outline" className="h-14 justify-start" asChild>
           <Link to="/assistente">
             <Wand2 size={18} /> Assistente do turno
+          </Link>
+        </Button>
+        <Button variant="outline" className="h-14 justify-start" asChild>
+          <Link to="/ata">
+            <FileText size={18} /> Ata de final de semana
           </Link>
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>
