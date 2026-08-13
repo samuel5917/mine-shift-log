@@ -153,7 +153,18 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  --brand: oklch(0.3 0.05 255);
+  --brand-foreground: oklch(0.98 0.003 250);
+  --status-operando: oklch(0.42 0.09 150);
+  --status-operando-foreground: oklch(0.95 0.03 145);
+  --status-disponivel: oklch(0.3 0.02 250);
+  --status-disponivel-foreground: oklch(0.94 0.005 240);
+  --status-manutencao: oklch(0.42 0.13 25);
+  --status-manutencao-foreground: oklch(0.95 0.04 25);
+  --status-indisponivel: oklch(0.45 0.1 85);
+  --status-indisponivel-foreground: oklch(0.96 0.05 95);
 }
+
 
 @layer base {
   * {
