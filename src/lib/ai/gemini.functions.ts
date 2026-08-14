@@ -52,22 +52,26 @@ export const deleteAiKey = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-async function loadKey(supabase: {
-  from: (t: "ai_settings") => {
-    select: (c: string) => {
+type AiSupabase = {
+  from: (table: "ai_settings") => {
+    select: (columns: string) => {
       eq: (
-        c: string,
-        v: string,
+        column: string,
+        value: string,
       ) => { maybeSingle: () => Promise<{ data: { api_key: string } | null }> };
     };
   };
-}, userId: string) {
-  const { data } = await supabase.from("ai_settings").select("api_key").eq("user_id", userId).maybeSingle();
+};
+
+async function loadKey(supabase: AiSupabase, userId: string) {
+  const { data } = await supabase
+    .from("ai_settings")
+    .select("api_key")
+    .eq("user_id", userId)
+    .maybeSingle();
   const key = data?.api_key ?? "";
   if (!key) {
-    throw new Error(
-      "Configure sua API Key do Gemini em Configurações → Inteligência Artificial.",
-    );
+    throw new Error("Configure sua API Key do Gemini em Configurações → Inteligência Artificial.");
   }
   return key;
 }
@@ -105,7 +109,7 @@ async function callGemini(key: string, userPrompt: string) {
 export const testAiConnection = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const key = await loadKey(context.supabase as never, context.userId);
+    const key = await loadKey(context.supabase as unknown as AiSupabase, context.userId);
     await callGemini(key, "Responda apenas com: OK");
     return { ok: true };
   });
@@ -127,7 +131,7 @@ export const reviewWithAi = createServerFn({ method: "POST" })
     if (!data.structured.trim() && !data.current.trim() && !data.raw.trim()) {
       throw new Error("Preencha os dados do informe ou cole um texto bruto para revisar.");
     }
-    const key = await loadKey(context.supabase as never, context.userId);
+    const key = await loadKey(context.supabase as unknown as AiSupabase, context.userId);
     const texto = await callGemini(key, buildUserPrompt(data));
     return { texto };
   });
