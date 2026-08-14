@@ -37,6 +37,7 @@ import {
   viagensResumo,
 } from "@/lib/assistente/generate";
 import { parseQuickEntry } from "@/lib/assistente/quick-parse";
+import { AiReviewDialog } from "@/components/ai/AiReviewDialog";
 
 export const Route = createFileRoute("/_authenticated/assistente")({
   head: () => ({
@@ -776,7 +777,41 @@ function Assistente() {
           <Wand2 size={18} /> Gerar justificativas
         </Button>
         <CopyButton text={tudo} label="Copiar tudo" size="default" variant="secondary" />
+        <AiReviewDialog
+          kind="assistente"
+          structured={tudo}
+          current={state.textos["revisaoIA"] ?? ""}
+          onApply={(t) => {
+            patch({ textos: { ...state.textos, revisaoIA: t } });
+            setGerado(true);
+          }}
+        />
       </div>
+
+      {state.textos["revisaoIA"] ? (
+        <SectionCard
+          title="Informe revisado com IA"
+          description="Texto revisado e organizado pela IA a partir dos dados informados"
+          action={<CopyButton text={state.textos["revisaoIA"] ?? ""} />}
+        >
+          <Textarea
+            rows={12}
+            value={state.textos["revisaoIA"] ?? ""}
+            onChange={(e) => patch({ textos: { ...state.textos, revisaoIA: e.target.value } })}
+            className="font-sans text-sm"
+          />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const { revisaoIA: _drop, ...rest } = state.textos;
+              patch({ textos: rest });
+            }}
+          >
+            Descartar revisão
+          </Button>
+        </SectionCard>
+      ) : null}
 
       {gerado ? (
         secoes.length === 0 ? (
