@@ -86,8 +86,6 @@ async function callGemini(key: string, userPrompt: string) {
       generationConfig: { temperature: 0.2, maxOutputTokens: 2048 },
     }),
   });
-  if (!res.ok) {
-    const body = await res.text();
     if (!res.ok) {
   const body = await res.text();
 
