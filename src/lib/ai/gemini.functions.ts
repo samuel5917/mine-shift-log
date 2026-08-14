@@ -79,37 +79,78 @@ async function loadKey(supabase: AiSupabase, userId: string) {
 async function callGemini(key: string, userPrompt: string) {
   const res = await fetch(endpoint(key), {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: {
+      "content-type": "application/json",
+    },
     body: JSON.stringify({
-      systemInstruction: { parts: [{ text: AI_SYSTEM_PROMPT }] },
-      contents: [{ role: "user", parts: [{ text: userPrompt }] }],
-      generationConfig: { temperature: 0.2, maxOutputTokens: 2048 },
+      systemInstruction: {
+        parts: [{ text: AI_SYSTEM_PROMPT }],
+      },
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: userPrompt }],
+        },
+      ],
+      generationConfig: {
+        temperature: 0.2,
+        maxOutputTokens: 2048,
+      },
     }),
   });
-    if (!res.ok) {
-  const body = await res.text();
 
-  console.error("[Gemini] erro", res.status, body);
+  // IMPORTANTE:
+  // A resposta é lida UMA ÚNICA VEZ.
+  const responseText = await res.text();
 
-  throw new Error(
-    `Gemini retornou erro ${res.status}. Verifique a API Key e a configuração do Gemini.`,
-  );
-}
+  if (!res.ok) {
+    console.error(
+      "[Gemini] erro",
+      res.status,
+      responseText.slice(0, 1000),
+    );
+
     throw new Error(
-      "Não foi possível realizar a revisão com IA. Verifique sua conexão e a configuração da API Key.",
+      `Gemini retornou erro ${res.status}: ${responseText.slice(0, 500)}`,
     );
   }
-  const json = (await res.json()) as {
-    candidates?: { content?: { parts?: { text?: string }[] } }[];
+
+  let json: {
+    candidates?: {
+      content?: {
+        parts?: {
+          text?: string;
+        }[];
+      };
+    }[];
   };
-  const text =
-    json.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("").trim() ?? "";
-  if (!text) {
+
+  try {
+    json = JSON.parse(responseText);
+  } catch (error) {
+    console.error("[Gemini] resposta inválida:", responseText);
+
     throw new Error(
-      "Não foi possível realizar a revisão com IA. Verifique sua conexão e a configuração da API Key.",
+      "O Gemini retornou uma resposta inválida.",
     );
   }
+
+  const text =
+    json.candidates?.[0]?.content?.parts
+      ?.map((p) => p.text ?? "")
+      .join("")
+      .trim() ?? "";
+
+  if (!text) {
+    console.error("[Gemini] resposta sem texto:", json);
+
+    throw new Error(
+      "O Gemini não retornou um texto válido.",
+    );
+  }
+
   return text;
+}
 }
 
 export const testAiConnection = createServerFn({ method: "POST" })
