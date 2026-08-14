@@ -151,7 +151,6 @@ async function callGemini(key: string, userPrompt: string) {
 
   return text;
 }
-}
 
 export const testAiConnection = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
