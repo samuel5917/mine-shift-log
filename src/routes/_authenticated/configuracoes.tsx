@@ -2,8 +2,15 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Wrench } from "lucide-react";
+import { Bot, Wrench } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  deleteAiKey,
+  getAiStatus,
+  saveAiKey,
+  testAiConnection,
+} from "@/lib/ai/gemini.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -163,6 +170,106 @@ function ConfigPage() {
         </div>
 
         <AiSettingsCard />
+      </div>
+    </div>
+  );
+}
+
+function AiSettingsCard() {
+  const [apiKey, setApiKey] = useState("");
+  const [testing, setTesting] = useState(false);
+  const [connOk, setConnOk] = useState<boolean | null>(null);
+  const queryClient = useQueryClient();
+  const status = useServerFn(getAiStatus);
+  const save = useServerFn(saveAiKey);
+  const test = useServerFn(testAiConnection);
+  const remove = useServerFn(deleteAiKey);
+
+  const { data } = useQuery({ queryKey: ["ai_status"], queryFn: () => status({}) });
+
+  const saveKey = useMutation({
+    mutationFn: async () => save({ data: { apiKey } }),
+    onSuccess: () => {
+      setApiKey("");
+      setConnOk(null);
+      toast.success("API Key salva");
+      queryClient.invalidateQueries({ queryKey: ["ai_status"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const clearKey = useMutation({
+    mutationFn: async () => remove({}),
+    onSuccess: () => {
+      setConnOk(null);
+      toast.success("API Key removida");
+      queryClient.invalidateQueries({ queryKey: ["ai_status"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  async function testar() {
+    if (testing) return;
+    setTesting(true);
+    try {
+      await test({});
+      setConnOk(true);
+      toast.success("Gemini conectado");
+    } catch (e) {
+      setConnOk(false);
+      toast.error(
+        e instanceof Error
+          ? e.message
+          : "Não foi possível realizar a revisão com IA. Verifique sua conexão e a configuração da API Key.",
+      );
+    } finally {
+      setTesting(false);
+    }
+  }
+
+  const statusLabel =
+    connOk === false
+      ? "🟠 Erro na conexão"
+      : data?.configured
+        ? "🟢 Gemini conectado"
+        : "🔴 Gemini não configurado";
+
+  return (
+    <div className="space-y-4 rounded-lg border bg-card p-5">
+      <div className="flex items-center gap-2">
+        <Bot size={18} className="text-muted-foreground" />
+        <h2 className="font-semibold text-card-foreground">Inteligência Artificial</h2>
+      </div>
+      <p className="text-sm text-muted-foreground">
+        Provedor: <span className="font-medium text-card-foreground">Google Gemini</span>
+      </p>
+      <p className="text-sm font-medium">{statusLabel}</p>
+      <div className="space-y-2">
+        <Label htmlFor="gemini">API Key</Label>
+        <Input
+          id="gemini"
+          type="password"
+          autoComplete="off"
+          placeholder={data?.configured ? `Chave salva (${data.hint})` : "Cole sua API Key do Gemini"}
+          value={apiKey}
+          onChange={(e) => setApiKey(e.target.value)}
+        />
+        <p className="text-xs text-muted-foreground">
+          A chave é armazenada com segurança no backend e nunca fica exposta no navegador.
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <Button onClick={() => saveKey.mutate()} disabled={apiKey.trim().length < 10 || saveKey.isPending}>
+          Salvar API Key
+        </Button>
+        <Button variant="outline" onClick={testar} disabled={testing || !data?.configured}>
+          {testing ? "Testando..." : "Testar conexão"}
+        </Button>
+        {data?.configured ? (
+          <Button variant="ghost" onClick={() => clearKey.mutate()} disabled={clearKey.isPending}>
+            Remover
+          </Button>
+        ) : null}
       </div>
     </div>
   );
