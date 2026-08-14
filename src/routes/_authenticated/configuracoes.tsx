@@ -161,6 +161,8 @@ function ConfigPage() {
             ))}
           </ul>
         </div>
+
+        <AiSettingsCard />
       </div>
     </div>
   );
