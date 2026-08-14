@@ -27,6 +27,7 @@ import {
 } from "@/lib/ata/types";
 import { gerarAtaTexto, participanteLinha } from "@/lib/ata/generate";
 import { baixarDocx, baixarPdf } from "@/lib/ata/export";
+import { AiReviewDialog } from "@/components/ai/AiReviewDialog";
 
 export const Route = createFileRoute("/_authenticated/ata")({
   head: () => ({
@@ -621,6 +622,16 @@ function AtaPage() {
 
       {/* Ações */}
       <div className="flex flex-wrap items-center gap-2">
+        <AiReviewDialog
+          kind="ata"
+          structured={texto}
+          current={preview}
+          onApply={(t) => {
+            setPreview(t);
+            setEditando(false);
+            patch({ conteudo: t });
+          }}
+        />
         <Button size="lg" onClick={gerar}>
           <Wand2 size={18} /> Gerar ata
         </Button>
