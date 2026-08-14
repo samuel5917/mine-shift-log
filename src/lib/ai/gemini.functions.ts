@@ -88,7 +88,15 @@ async function callGemini(key: string, userPrompt: string) {
   });
   if (!res.ok) {
     const body = await res.text();
-    console.error("[Gemini] erro", res.status, body.slice(0, 500));
+    if (!res.ok) {
+  const body = await res.text();
+
+  console.error("[Gemini] erro", res.status, body);
+
+  throw new Error(
+    `Gemini retornou erro ${res.status}. Verifique a API Key e a configuração do Gemini.`,
+  );
+}
     throw new Error(
       "Não foi possível realizar a revisão com IA. Verifique sua conexão e a configuração da API Key.",
     );
