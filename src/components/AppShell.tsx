@@ -70,7 +70,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <LogOut size={16} /> Sair
           </button>
           <button
-            className="rounded-md border p-2 md:hidden"
+            className="ml-auto rounded-md border p-2 md:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
           >
