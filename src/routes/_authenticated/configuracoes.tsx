@@ -170,8 +170,46 @@ function ConfigPage() {
           </ul>
         </div>
 
+        <AppearanceCard />
+
         <AiSettingsCard />
       </div>
+    </div>
+  );
+}
+
+function AppearanceCard() {
+  const [theme, setTheme] = useState<Theme>("light");
+
+  useEffect(() => {
+    const t = getStoredTheme();
+    setTheme(t);
+    applyTheme(t);
+  }, []);
+
+  function toggleTheme() {
+    const next: Theme = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    applyTheme(next);
+  }
+
+  return (
+    <div className="space-y-4 rounded-lg border bg-card p-5">
+      <div className="flex items-center gap-2">
+        {theme === "dark" ? (
+          <Moon size={18} className="text-muted-foreground" />
+        ) : (
+          <Sun size={18} className="text-muted-foreground" />
+        )}
+        <h2 className="font-semibold text-card-foreground">Aparência</h2>
+      </div>
+      <p className="text-sm text-muted-foreground">
+        Modo escuro está {theme === "dark" ? "ativado" : "desativado"}. A preferência é salva neste navegador.
+      </p>
+      <Button variant="outline" onClick={toggleTheme}>
+        {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+        {theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
+      </Button>
     </div>
   );
 }
