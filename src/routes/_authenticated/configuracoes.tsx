@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Bot, Wrench } from "lucide-react";
+import { Bot, Moon, Sun, Wrench } from "lucide-react";
+import { applyTheme, getStoredTheme, type Theme } from "@/lib/theme";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import {
