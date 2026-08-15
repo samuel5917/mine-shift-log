@@ -125,7 +125,7 @@ function Dashboard() {
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>
           <Link to="/informes">
-            <ClipboardList size={18} /> Meus informes
+            <ClipboardList size={18} /> Equipamentos
           </Link>
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>
@@ -140,7 +140,7 @@ function Dashboard() {
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>
           <Link to="/equipamentos">
-            <Wrench size={18} /> Equipamentos
+            <Wrench size={18} /> Gerenciar equipamentos
           </Link>
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>
