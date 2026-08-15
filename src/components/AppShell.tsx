@@ -4,27 +4,23 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   LayoutDashboard,
   ClipboardList,
-  Wrench,
   Settings,
   LogOut,
   Menu,
   X,
   Wand2,
   FileText,
-  Moon,
-  Sun,
 } from "lucide-react";
-import { applyTheme, getStoredTheme, type Theme } from "@/lib/theme";
+import { applyTheme, getStoredTheme } from "@/lib/theme";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/trindade-logo.png";
 
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/informes", label: "Meus Informes", icon: ClipboardList },
-  { to: "/assistente", label: "Assistente do Turno", icon: Wand2 },
-  { to: "/ata", label: "Ata de Final de Semana", icon: FileText },
-  { to: "/equipamentos", label: "Equipamentos", icon: Wrench },
+  { to: "/informes", label: "Equipamentos", icon: ClipboardList },
+  { to: "/assistente", label: "Justificativa do Blend", icon: Wand2 },
+  { to: "/ata", label: "Elaboração de Ata", icon: FileText },
   { to: "/configuracoes", label: "Configurações", icon: Settings },
 ] as const;
 
@@ -33,19 +29,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    const t = getStoredTheme();
-    setTheme(t);
-    applyTheme(t);
+    applyTheme(getStoredTheme());
   }, []);
-
-  function toggleTheme() {
-    const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    applyTheme(next);
-  }
 
   async function signOut() {
     await queryClient.cancelQueries();
@@ -77,22 +64,13 @@ export function AppShell({ children }: { children: ReactNode }) {
             ))}
           </nav>
           <button
-            onClick={toggleTheme}
-            aria-label={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
-            title={theme === "dark" ? "Modo claro" : "Modo escuro"}
-            className="ml-auto flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent"
-          >
-            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-            <span className="hidden lg:inline">{theme === "dark" ? "Modo claro" : "Modo escuro"}</span>
-          </button>
-          <button
             onClick={signOut}
-            className="hidden items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent md:flex"
+            className="ml-auto hidden items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent md:flex"
           >
             <LogOut size={16} /> Sair
           </button>
           <button
-            className="rounded-md border p-2 md:hidden"
+            className="ml-auto rounded-md border p-2 md:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
           >

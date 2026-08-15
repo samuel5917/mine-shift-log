@@ -32,13 +32,13 @@ import { AiReviewDialog } from "@/components/ai/AiReviewDialog";
 export const Route = createFileRoute("/_authenticated/ata")({
   head: () => ({
     meta: [
-      { title: "Ata de Final de Semana | Trindade Mineração" },
+      { title: "Elaboração de Ata | Trindade Mineração" },
       {
         name: "description",
         content:
           "Assistente para criação das atas de reunião de alinhamento operacional, com exportação em Word e PDF.",
       },
-      { property: "og:title", content: "Ata de Final de Semana | Trindade Mineração" },
+      { property: "og:title", content: "Elaboração de Ata | Trindade Mineração" },
       {
         property: "og:description",
         content: "Monte a ata de alinhamento com poucos cliques e exporte em Word ou PDF.",

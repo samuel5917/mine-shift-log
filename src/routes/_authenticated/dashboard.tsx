@@ -125,22 +125,22 @@ function Dashboard() {
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>
           <Link to="/informes">
-            <ClipboardList size={18} /> Meus informes
+            <ClipboardList size={18} /> Equipamentos
           </Link>
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>
           <Link to="/assistente">
-            <Wand2 size={18} /> Assistente do turno
+            <Wand2 size={18} /> Justificativa do Blend
           </Link>
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>
           <Link to="/ata">
-            <FileText size={18} /> Ata de final de semana
+            <FileText size={18} /> Elaboração de Ata
           </Link>
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>
           <Link to="/equipamentos">
-            <Wrench size={18} /> Equipamentos
+            <Wrench size={18} /> Gerenciar equipamentos
           </Link>
         </Button>
         <Button variant="outline" className="h-14 justify-start" asChild>

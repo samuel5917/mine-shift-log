@@ -42,13 +42,13 @@ import { AiReviewDialog } from "@/components/ai/AiReviewDialog";
 export const Route = createFileRoute("/_authenticated/assistente")({
   head: () => ({
     meta: [
-      { title: "Assistente do Turno | Trindade Mineração" },
+      { title: "Justificativa do Blend | Trindade Mineração" },
       {
         name: "description",
         content:
           "Assistente guiado para redação das justificativas operacionais do turno: blend, movimentações, paradas, impactos e observações.",
       },
-      { property: "og:title", content: "Assistente do Turno | Trindade Mineração" },
+      { property: "og:title", content: "Justificativa do Blend | Trindade Mineração" },
       {
         property: "og:description",
         content: "Gere justificativas operacionais profissionais com poucos cliques.",
@@ -140,7 +140,7 @@ function Assistente() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Assistente do Turno</h1>
+          <h1 className="text-2xl font-bold text-foreground">Justificativa do Blend</h1>
           <p className="text-sm text-muted-foreground">
             Selecione as informações e o assistente redige as justificativas operacionais.
           </p>
