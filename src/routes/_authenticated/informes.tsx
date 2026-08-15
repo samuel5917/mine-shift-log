@@ -31,9 +31,9 @@ import { createReportForToday, duplicateReport } from "@/lib/reports";
 export const Route = createFileRoute("/_authenticated/informes")({
   head: () => ({
     meta: [
-      { title: "Meus Informes | Informe de Turno" },
+      { title: "Equipamentos | Informe de Turno" },
       { name: "description", content: "Histórico de informes de turno criados, com duplicar e exportar." },
-      { property: "og:title", content: "Meus Informes | Informe de Turno" },
+      { property: "og:title", content: "Equipamentos | Informe de Turno" },
       { property: "og:description", content: "Histórico de informes de turno criados." },
     ],
   }),
@@ -100,7 +100,7 @@ function InformesPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-foreground">Meus Informes</h1>
+        <h1 className="text-2xl font-bold text-foreground">Equipamentos</h1>
         <Button onClick={() => setCreating({ date: todayISO(), shift: "1" })}>
           <FilePlus2 size={16} /> Novo informe
         </Button>
