@@ -38,6 +38,33 @@ export type Database = {
         }
         Relationships: []
       }
+      dashboard_assets: {
+        Row: {
+          file_name: string
+          kind: string
+          mime_type: string
+          path: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          file_name: string
+          kind: string
+          mime_type?: string
+          path: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          file_name?: string
+          kind?: string
+          mime_type?: string
+          path?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       equipment_types: {
         Row: {
           category: string
@@ -227,6 +254,33 @@ export type Database = {
           report_date?: string
           shift?: number
           show_parking?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      shift_tasks: {
+        Row: {
+          created_at: string
+          done: boolean
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          title?: string
           updated_at?: string
           user_id?: string
         }

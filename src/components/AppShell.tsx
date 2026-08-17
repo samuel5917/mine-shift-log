@@ -10,6 +10,7 @@ import {
   X,
   Wand2,
   FileText,
+  Zap,
 } from "lucide-react";
 import { applyTheme, getStoredTheme } from "@/lib/theme";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,8 +22,10 @@ const NAV = [
   { to: "/informes", label: "Equipamentos", icon: ClipboardList },
   { to: "/assistente", label: "Justificativa do Blend", icon: Wand2 },
   { to: "/ata", label: "Elaboração de Ata", icon: FileText },
+  { to: "/clima", label: "Clima", icon: Zap },
   { to: "/configuracoes", label: "Configurações", icon: Settings },
 ] as const;
+
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
