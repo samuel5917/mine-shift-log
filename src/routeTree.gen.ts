@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedAssistenteRouteImport } from './routes/_authenticated/assistente'
 import { Route as AuthenticatedAtaRouteImport } from './routes/_authenticated/ata'
+import { Route as AuthenticatedClimaRouteImport } from './routes/_authenticated/clima'
 import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedEquipamentosRouteImport } from './routes/_authenticated/equipamentos'
@@ -42,6 +43,11 @@ const AuthenticatedAssistenteRoute = AuthenticatedAssistenteRouteImport.update({
 const AuthenticatedAtaRoute = AuthenticatedAtaRouteImport.update({
   id: '/ata',
   path: '/ata',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedClimaRoute = AuthenticatedClimaRouteImport.update({
+  id: '/clima',
+  path: '/clima',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedConfiguracoesRoute =
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/assistente': typeof AuthenticatedAssistenteRoute
   '/ata': typeof AuthenticatedAtaRoute
+  '/clima': typeof AuthenticatedClimaRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/equipamentos': typeof AuthenticatedEquipamentosRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/assistente': typeof AuthenticatedAssistenteRoute
   '/ata': typeof AuthenticatedAtaRoute
+  '/clima': typeof AuthenticatedClimaRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/equipamentos': typeof AuthenticatedEquipamentosRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/assistente': typeof AuthenticatedAssistenteRoute
   '/_authenticated/ata': typeof AuthenticatedAtaRoute
+  '/_authenticated/clima': typeof AuthenticatedClimaRoute
   '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/equipamentos': typeof AuthenticatedEquipamentosRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/assistente'
     | '/ata'
+    | '/clima'
     | '/configuracoes'
     | '/dashboard'
     | '/equipamentos'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/assistente'
     | '/ata'
+    | '/clima'
     | '/configuracoes'
     | '/dashboard'
     | '/equipamentos'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/assistente'
     | '/_authenticated/ata'
+    | '/_authenticated/clima'
     | '/_authenticated/configuracoes'
     | '/_authenticated/dashboard'
     | '/_authenticated/equipamentos'
@@ -187,6 +199,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAtaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/clima': {
+      id: '/_authenticated/clima'
+      path: '/clima'
+      fullPath: '/clima'
+      preLoaderRoute: typeof AuthenticatedClimaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/configuracoes': {
       id: '/_authenticated/configuracoes'
       path: '/configuracoes'
@@ -228,6 +247,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAssistenteRoute: typeof AuthenticatedAssistenteRoute
   AuthenticatedAtaRoute: typeof AuthenticatedAtaRoute
+  AuthenticatedClimaRoute: typeof AuthenticatedClimaRoute
   AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEquipamentosRoute: typeof AuthenticatedEquipamentosRoute
@@ -238,6 +258,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAssistenteRoute: AuthenticatedAssistenteRoute,
   AuthenticatedAtaRoute: AuthenticatedAtaRoute,
+  AuthenticatedClimaRoute: AuthenticatedClimaRoute,
   AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEquipamentosRoute: AuthenticatedEquipamentosRoute,
