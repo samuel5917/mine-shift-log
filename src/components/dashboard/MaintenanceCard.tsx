@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { Wrench } from "lucide-react";
+import { Wrench, CircleCheck as CheckCircle2, CircleAlert as AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDateBR, SHIFT_LABEL } from "@/lib/domain";
 
-/** Equipamentos em manutenção conforme o informe de turno mais recente. */
 export function MaintenanceCard() {
   const { data, isLoading } = useQuery({
     queryKey: ["maintenance-equipments"],
@@ -27,10 +26,13 @@ export function MaintenanceCard() {
   const lines = data?.lines ?? [];
 
   return (
-    <section className="rounded-lg border bg-card">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3">
+    <section className="card-lift overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm hover:shadow-lg">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 px-4 py-3">
         <h2 className="flex items-center gap-2 font-semibold text-card-foreground">
-          <Wrench size={16} /> Equipamentos em manutenção
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-status-manutencao/15">
+            <Wrench size={14} className="text-status-manutencao-foreground" />
+          </span>
+          Equipamentos em manutenção
         </h2>
         <span className="text-xs text-muted-foreground">
           {data?.report
@@ -41,22 +43,32 @@ export function MaintenanceCard() {
 
       <div className="p-4">
         {isLoading ? (
-          <p className="text-sm text-muted-foreground">Carregando…</p>
+          <div className="space-y-2">
+            <div className="shimmer h-10 rounded-md" />
+            <div className="shimmer h-10 rounded-md" />
+          </div>
         ) : lines.length === 0 ? (
-          <p className="text-sm font-medium text-card-foreground">
-            🟢 Nenhum equipamento em manutenção
-          </p>
+          <div className="flex items-center gap-3 rounded-lg border border-status-operando/20 bg-status-operando/5 px-4 py-3">
+            <CheckCircle2 size={20} className="text-status-operando-foreground" />
+            <p className="text-sm font-medium text-card-foreground">
+              Nenhum equipamento em manutenção
+            </p>
+          </div>
         ) : (
           <>
             <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {lines.map((l) => (
                 <li
                   key={l.code}
-                  className="flex items-center gap-2 rounded-md border bg-background px-3 py-2"
+                  className="card-lift group flex items-center gap-2.5 rounded-lg border border-border/60 bg-background px-3 py-2.5"
                 >
-                  <span aria-hidden>🔴</span>
-                  <span className="text-sm font-semibold text-foreground">{l.code}</span>
-                  <span className="truncate text-sm text-muted-foreground">— {l.name}</span>
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-status-manutencao/15">
+                    <AlertCircle size={13} className="text-status-manutencao-foreground" />
+                  </span>
+                  <div className="min-w-0">
+                    <span className="block text-sm font-semibold text-foreground">{l.code}</span>
+                    <span className="block truncate text-xs text-muted-foreground">{l.name}</span>
+                  </div>
                 </li>
               ))}
             </ul>

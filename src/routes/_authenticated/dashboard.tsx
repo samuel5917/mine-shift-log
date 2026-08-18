@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CalendarDays } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDateBR, todayISO } from "@/lib/domain";
 import { MaintenanceCard } from "@/components/dashboard/MaintenanceCard";
@@ -48,7 +49,6 @@ function Dashboard() {
     },
   });
 
-  // Primeiro acesso: cria a lista de equipamentos de exemplo do usuário.
   const seed = useMutation({
     mutationFn: async () => {
       const { error } = await supabase.rpc("seed_default_equipments");
@@ -63,20 +63,31 @@ function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="animate-fade-in-up stagger-1">
         <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+          <CalendarDays size={14} className="text-primary/60" />
           {profile?.profile?.name || profile?.email} · {formatDateBR(todayISO())}
         </p>
       </div>
 
-      <MaintenanceCard />
+      <div className="animate-fade-in-up stagger-2">
+        <MaintenanceCard />
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <TasksCard />
-        <LightningCard />
-        <BlendCard />
-        <DiretrizCard />
+        <div className="animate-fade-in-up stagger-3">
+          <TasksCard />
+        </div>
+        <div className="animate-fade-in-up stagger-4">
+          <LightningCard />
+        </div>
+        <div className="animate-fade-in-up stagger-5">
+          <BlendCard />
+        </div>
+        <div className="animate-fade-in-up stagger-6">
+          <DiretrizCard />
+        </div>
       </div>
     </div>
   );

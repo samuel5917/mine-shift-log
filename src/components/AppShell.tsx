@@ -1,17 +1,7 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  LayoutDashboard,
-  ClipboardList,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-  Wand2,
-  FileText,
-  Zap,
-} from "lucide-react";
+import { LayoutDashboard, ClipboardList, Settings, LogOut, Menu, X, Wand as Wand2, FileText, Zap } from "lucide-react";
 import { applyTheme, getStoredTheme } from "@/lib/theme";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -25,7 +15,6 @@ const NAV = [
   { to: "/clima", label: "Clima", icon: Zap },
   { to: "/configuracoes", label: "Configurações", icon: Settings },
 ] as const;
-
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -46,9 +35,9 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-30 border-b bg-card">
+      <header className="sticky top-0 z-30 border-b border-border/50 bg-card/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4">
-          <Link to="/dashboard" className="flex items-center gap-2">
+          <Link to="/dashboard" className="flex items-center gap-2 transition-transform hover:scale-105">
             <img src={logo} alt="Trindade Mineração" className="h-8 w-auto" width={1536} height={512} />
           </Link>
           <nav className="ml-6 hidden items-center gap-1 md:flex">
@@ -56,8 +45,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 key={item.to}
                 to={item.to}
+                data-active={pathname.startsWith(item.to)}
                 className={cn(
-                  "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
+                  "nav-underline flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
                   pathname.startsWith(item.to) && "bg-accent text-accent-foreground",
                 )}
               >
@@ -68,12 +58,12 @@ export function AppShell({ children }: { children: ReactNode }) {
           </nav>
           <button
             onClick={signOut}
-            className="ml-auto hidden items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent md:flex"
+            className="ml-auto hidden items-center gap-2 rounded-md border border-border/60 px-3 py-2 text-sm font-medium text-muted-foreground transition-all hover:border-destructive/30 hover:bg-destructive/5 hover:text-destructive md:flex"
           >
             <LogOut size={16} /> Sair
           </button>
           <button
-            className="ml-auto rounded-md border p-2 md:hidden"
+            className="ml-auto rounded-md border p-2 transition-colors hover:bg-accent md:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
           >
@@ -87,7 +77,10 @@ export function AppShell({ children }: { children: ReactNode }) {
                 key={item.to}
                 to={item.to}
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-2 rounded-md px-3 py-3 text-sm font-medium text-foreground"
+                className={cn(
+                  "flex items-center gap-2 rounded-md px-3 py-3 text-sm font-medium transition-colors hover:bg-accent",
+                  pathname.startsWith(item.to) ? "bg-accent text-accent-foreground" : "text-foreground",
+                )}
               >
                 <item.icon size={16} />
                 {item.label}
@@ -95,14 +88,14 @@ export function AppShell({ children }: { children: ReactNode }) {
             ))}
             <button
               onClick={signOut}
-              className="flex w-full items-center gap-2 rounded-md px-3 py-3 text-sm font-medium text-destructive"
+              className="flex w-full items-center gap-2 rounded-md px-3 py-3 text-sm font-medium text-destructive transition-colors hover:bg-destructive/5"
             >
               <LogOut size={16} /> Sair
             </button>
           </div>
         ) : null}
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-6">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 py-6 animate-fade-in">{children}</main>
     </div>
   );
 }

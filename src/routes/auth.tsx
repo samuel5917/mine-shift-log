@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { Loader as Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -69,14 +70,39 @@ function AuthPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
-      <div className="w-full max-w-md">
-        <img src={logo} alt="Trindade Mineração" className="mx-auto h-12 w-auto" width={1536} height={512} />
-        <h1 className="mt-6 text-center text-2xl font-bold text-foreground">Informe de Turno</h1>
-        <p className="mt-1 text-center text-sm text-muted-foreground">
-          Acesse com seu e-mail corporativo
-        </p>
-        <div className="mt-6 rounded-lg border bg-card p-6">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-10">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.05]"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 15% 20%, oklch(0.46 0.13 152) 0%, transparent 50%),
+            radial-gradient(circle at 85% 80%, oklch(0.5 0.12 250) 0%, transparent 50%)
+          `,
+        }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage: `linear-gradient(oklch(0.2 0.02 250) 1px, transparent 1px),
+            linear-gradient(90deg, oklch(0.2 0.02 250) 1px, transparent 1px)`,
+          backgroundSize: "48px 48px",
+        }}
+      />
+
+      <div className="relative z-10 w-full max-w-md animate-scale-in">
+        <div className="text-center">
+          <img
+            src={logo}
+            alt="Trindade Mineração"
+            className="mx-auto h-12 w-auto transition-transform duration-300 hover:scale-105"
+            width={1536}
+            height={512}
+          />
+          <h1 className="mt-6 text-2xl font-bold text-foreground">Informe de Turno</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Acesse com seu e-mail corporativo</p>
+        </div>
+
+        <div className="mt-8 rounded-xl border border-border/60 bg-card/80 p-6 shadow-xl backdrop-blur-md">
           <Tabs defaultValue="login">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="login">Entrar</TabsTrigger>
@@ -86,7 +112,14 @@ function AuthPage() {
               <form onSubmit={signIn} className="space-y-4 pt-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">E-mail</Label>
-                  <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <Input
+                    id="email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="transition-shadow focus-visible:ring-2 focus-visible:ring-primary/40"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password">Senha</Label>
@@ -96,10 +129,21 @@ function AuthPage() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="transition-shadow focus-visible:ring-2 focus-visible:ring-primary/40"
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Entrando..." : "Entrar"}
+                <Button
+                  type="submit"
+                  className="w-full shadow-md transition-all hover:shadow-lg hover:shadow-primary/20"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" /> Entrando...
+                    </>
+                  ) : (
+                    "Entrar"
+                  )}
                 </Button>
               </form>
             </TabsContent>
@@ -107,11 +151,24 @@ function AuthPage() {
               <form onSubmit={signUp} className="space-y-4 pt-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Nome</Label>
-                  <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} />
+                  <Input
+                    id="name"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="transition-shadow focus-visible:ring-2 focus-visible:ring-primary/40"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email2">E-mail</Label>
-                  <Input id="email2" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <Input
+                    id="email2"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="transition-shadow focus-visible:ring-2 focus-visible:ring-primary/40"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password2">Senha</Label>
@@ -122,10 +179,21 @@ function AuthPage() {
                     minLength={6}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="transition-shadow focus-visible:ring-2 focus-visible:ring-primary/40"
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Criando..." : "Criar conta"}
+                <Button
+                  type="submit"
+                  className="w-full shadow-md transition-all hover:shadow-lg hover:shadow-primary/20"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" /> Criando...
+                    </>
+                  ) : (
+                    "Criar conta"
+                  )}
                 </Button>
               </form>
             </TabsContent>
