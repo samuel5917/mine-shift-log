@@ -9,7 +9,7 @@
 // Lovable config wrapper never enters sandbox mode and skips the dev-server-bridge + hmr-gate
 // plugins that connect the Vite dev server to the preview proxy. Setting it here before the
 // wrapper evaluates its environment detection enables those plugins so the preview works.
-process.env.LOVABLE_SANDBOX = process.env.LOVABLE_SANDBOX ?? "1";
+process.env['LOVABLE_SANDBOX'] = process.env['LOVABLE_SANDBOX'] ?? "1";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
