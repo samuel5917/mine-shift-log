@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { toPng } from "html-to-image";
 import {
   ArrowLeft,
   ArrowUp,
@@ -245,6 +244,7 @@ function InformeEditor() {
     if (!sheetRef.current || !report) return;
     setExporting(true);
     try {
+      const { toPng } = await import("html-to-image");
       const dataUrl = await toPng(sheetRef.current, {
         pixelRatio: 2,
         backgroundColor: "#ffffff",
