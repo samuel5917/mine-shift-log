@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChartBar as BarChart3, Maximize2, Minus, Paperclip, Plus, RotateCcw, Trash2 } from "lucide-react";
+import {
+  ChartBar as BarChart3,
+  Maximize2,
+  Minus,
+  Paperclip,
+  Plus,
+  RotateCcw,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";

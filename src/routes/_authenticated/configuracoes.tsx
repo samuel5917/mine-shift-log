@@ -218,6 +218,7 @@ function AppearanceCard() {
 
 function AiSettingsCard() {
   const [apiKey, setApiKey] = useState("");
+  const [model, setModel] = useState("");
   const [testing, setTesting] = useState(false);
   const [connOk, setConnOk] = useState<boolean | null>(null);
   const queryClient = useQueryClient();
@@ -229,7 +230,7 @@ function AiSettingsCard() {
   const { data } = useQuery({ queryKey: ["ai_status"], queryFn: () => status({}) });
 
   const saveKey = useMutation({
-    mutationFn: async () => save({ data: { apiKey } }),
+    mutationFn: async () => save({ data: { apiKey, model } }),
     onSuccess: () => {
       setApiKey("");
       setConnOk(null);
@@ -255,7 +256,7 @@ function AiSettingsCard() {
     try {
       await test({});
       setConnOk(true);
-      toast.success("Gemini conectado");
+      toast.success("IA conectada");
     } catch (e) {
       setConnOk(false);
       toast.error(
@@ -272,8 +273,8 @@ function AiSettingsCard() {
     connOk === false
       ? "🟠 Erro na conexão"
       : data?.configured
-        ? "🟢 Gemini conectado"
-        : "🔴 Gemini não configurado";
+        ? "🟢 IA conectada"
+        : "🔴 IA não configurada";
 
   return (
     <div className="space-y-4 rounded-lg border bg-card p-5">
@@ -282,23 +283,36 @@ function AiSettingsCard() {
         <h2 className="font-semibold text-card-foreground">Inteligência Artificial</h2>
       </div>
       <p className="text-sm text-muted-foreground">
-        Provedor: <span className="font-medium text-card-foreground">Google Gemini</span>
+        Provedor:{" "}
+        <span className="font-medium text-card-foreground">
+          {data?.provider === "openrouter" ? "OpenRouter" : (data?.provider ?? "OpenRouter")}
+        </span>
       </p>
       <p className="text-sm font-medium">{statusLabel}</p>
       <div className="space-y-2">
-        <Label htmlFor="gemini">API Key</Label>
+        <Label htmlFor="ai-key">API Key</Label>
         <Input
-          id="gemini"
+          id="ai-key"
           type="password"
           autoComplete="off"
-          placeholder={
-            data?.configured ? `Chave salva (${data.hint})` : "Cole sua API Key do Gemini"
-          }
+          placeholder={data?.configured ? `Chave salva (${data.hint})` : "Cole sua API Key"}
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
         />
         <p className="text-xs text-muted-foreground">
           A chave é armazenada com segurança no backend e nunca fica exposta no navegador.
+        </p>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="ai-model">Modelo (opcional)</Label>
+        <Input
+          id="ai-model"
+          placeholder={data?.model || "Use o padrão do provedor"}
+          value={model}
+          onChange={(e) => setModel(e.target.value)}
+        />
+        <p className="text-xs text-muted-foreground">
+          Deixe vazio para usar o modelo padrão. Ex: openrouter/free
         </p>
       </div>
       <div className="flex flex-wrap gap-2">
