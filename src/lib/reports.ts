@@ -47,7 +47,11 @@ export async function createReportForToday(date = todayISO(), shift = 1): Promis
 }
 
 /** Duplicates an existing report into a new date/shift, keeping situations and fronts. */
-export async function duplicateReport(reportId: string, date: string, shift: number): Promise<string> {
+export async function duplicateReport(
+  reportId: string,
+  date: string,
+  shift: number,
+): Promise<string> {
   const userId = await requireUserId();
 
   const { data: source, error } = await supabase

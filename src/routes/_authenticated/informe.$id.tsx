@@ -2,24 +2,19 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import {
-  ArrowLeft,
-  ArrowUp,
-  ArrowDown,
-  Check,
-  Download,
-  Loader2,
-  Plus,
-  Search,
-  Trash2,
-  ImageDown,
-} from "lucide-react";
+import { ArrowLeft, ArrowUp, ArrowDown, Check, Download, Loader as Loader2, Plus, Search, Trash2, ImageDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { EquipmentIcon } from "@/components/EquipmentIcon";
 import { ReportSheet, type SheetLine } from "@/components/ReportSheet";
@@ -39,7 +34,10 @@ export const Route = createFileRoute("/_authenticated/informe/$id")({
   head: () => ({
     meta: [
       { title: "Editar informe | Informe de Turno" },
-      { name: "description", content: "Edite situações e frentes de operação e exporte o informe em PNG." },
+      {
+        name: "description",
+        content: "Edite situações e frentes de operação e exporte o informe em PNG.",
+      },
       { property: "og:title", content: "Editar informe | Informe de Turno" },
       { property: "og:description", content: "Edite situações e frentes de operação do turno." },
     ],
@@ -81,7 +79,11 @@ function InformeEditor() {
   const { data: report } = useQuery({
     queryKey: ["report", id],
     queryFn: async () => {
-      const { data, error } = await supabase.from("shift_reports").select("*").eq("id", id).single();
+      const { data, error } = await supabase
+        .from("shift_reports")
+        .select("*")
+        .eq("id", id)
+        .single();
       if (error) throw error;
       return data;
     },
@@ -104,7 +106,11 @@ function InformeEditor() {
     queryKey: ["profile"],
     queryFn: async () => {
       const { data: auth } = await supabase.auth.getUser();
-      const { data } = await supabase.from("profiles").select("*").eq("id", auth.user!.id).maybeSingle();
+      const { data } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", auth.user!.id)
+        .maybeSingle();
       return { profile: data, email: auth.user?.email ?? "" };
     },
   });
@@ -138,7 +144,10 @@ function InformeEditor() {
       toast.error("Erro ao salvar");
       return;
     }
-    await supabase.from("shift_reports").update({ updated_at: new Date().toISOString() }).eq("id", id);
+    await supabase
+      .from("shift_reports")
+      .update({ updated_at: new Date().toISOString() })
+      .eq("id", id);
     setSaveState("saved");
   }
 
@@ -213,17 +222,30 @@ function InformeEditor() {
     if (!a || !b) return;
     setLines(
       lines.map((l) =>
-        l.id === a.id ? { ...l, display_order: b.display_order } : l.id === b.id ? { ...l, display_order: a.display_order } : l,
+        l.id === a.id
+          ? { ...l, display_order: b.display_order }
+          : l.id === b.id
+            ? { ...l, display_order: a.display_order }
+            : l,
       ),
     );
     setSaveState("saving");
-    await supabase.from("shift_report_equipment").update({ display_order: b.display_order }).eq("id", a.id);
-    await supabase.from("shift_report_equipment").update({ display_order: a.display_order }).eq("id", b.id);
+    await supabase
+      .from("shift_report_equipment")
+      .update({ display_order: b.display_order })
+      .eq("id", a.id);
+    await supabase
+      .from("shift_report_equipment")
+      .update({ display_order: a.display_order })
+      .eq("id", b.id);
     setSaveState("saved");
     queryClient.invalidateQueries({ queryKey: ["report-lines", id] });
   }
 
-  const ordered = useMemo(() => [...lines].sort((a, b) => a.display_order - b.display_order), [lines]);
+  const ordered = useMemo(
+    () => [...lines].sort((a, b) => a.display_order - b.display_order),
+    [lines],
+  );
 
   const visible = useMemo(() => {
     const t = term.trim().toLowerCase();
@@ -273,7 +295,9 @@ function InformeEditor() {
     parking_front: l.parking_front,
   }));
 
-  const available = (equipments ?? []).filter((e) => !ordered.some((l) => l.equipment_id === e.id && l.code === e.code));
+  const available = (equipments ?? []).filter(
+    (e) => !ordered.some((l) => l.equipment_id === e.id && l.code === e.code),
+  );
 
   return (
     <div className="space-y-5">
@@ -343,7 +367,10 @@ function InformeEditor() {
 
       <div className="flex flex-wrap gap-3">
         <div className="relative min-w-52 flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            size={16}
+          />
           <Input
             className="pl-9"
             placeholder="Pesquisar equipamento..."
@@ -529,7 +556,8 @@ function InformeEditor() {
               Voltar
             </Button>
             <Button onClick={() => void exportPng()} disabled={exporting}>
-              {exporting ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />} Exportar PNG
+              {exporting ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />}{" "}
+              Exportar PNG
             </Button>
           </div>
         </DialogContent>

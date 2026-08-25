@@ -1,7 +1,17 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, ClipboardList, Settings, LogOut, Menu, X, Wand as Wand2, FileText, Zap } from "lucide-react";
+import {
+  LayoutDashboard,
+  ClipboardList,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+  Wand as Wand2,
+  FileText,
+  Zap,
+} from "lucide-react";
 import { applyTheme, getStoredTheme } from "@/lib/theme";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -37,8 +47,17 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-30 border-b border-border/50 bg-card/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4">
-          <Link to="/dashboard" className="flex items-center gap-2 transition-transform hover:scale-105">
-            <img src={logo} alt="Trindade Mineração" className="h-8 w-auto" width={1536} height={512} />
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-2 transition-transform hover:scale-105"
+          >
+            <img
+              src={logo}
+              alt="Trindade Mineração"
+              className="h-8 w-auto"
+              width={1536}
+              height={512}
+            />
           </Link>
           <nav className="ml-6 hidden items-center gap-1 md:flex">
             {NAV.map((item) => (
@@ -79,7 +98,9 @@ export function AppShell({ children }: { children: ReactNode }) {
                 onClick={() => setOpen(false)}
                 className={cn(
                   "flex items-center gap-2 rounded-md px-3 py-3 text-sm font-medium transition-colors hover:bg-accent",
-                  pathname.startsWith(item.to) ? "bg-accent text-accent-foreground" : "text-foreground",
+                  pathname.startsWith(item.to)
+                    ? "bg-accent text-accent-foreground"
+                    : "text-foreground",
                 )}
               >
                 <item.icon size={16} />

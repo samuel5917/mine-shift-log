@@ -9,7 +9,9 @@ export function MaintenanceCard() {
     queryFn: async () => {
       const { data: report, error } = await supabase
         .from("shift_reports")
-        .select("id, report_date, shift, shift_report_equipment(code, name, situation, display_order)")
+        .select(
+          "id, report_date, shift, shift_report_equipment(code, name, situation, display_order)",
+        )
         .order("report_date", { ascending: false })
         .order("created_at", { ascending: false })
         .limit(1)

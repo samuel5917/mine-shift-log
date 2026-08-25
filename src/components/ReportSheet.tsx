@@ -69,7 +69,11 @@ function Section({
       <tbody>
         <tr>
           <td style={{ border: BORDER, padding: "10px 12px", verticalAlign: "middle" }} rowSpan={2}>
-            <img src={logoUrl || logo} alt="Trindade Mineração" style={{ height: 46, objectFit: "contain" }} />
+            <img
+              src={logoUrl || logo}
+              alt="Trindade Mineração"
+              style={{ height: 46, objectFit: "contain" }}
+            />
           </td>
           <td
             style={{
@@ -86,7 +90,13 @@ function Section({
         </tr>
         <tr>
           <td
-            style={{ border: BORDER, textAlign: "center", fontWeight: 700, fontSize: 19, padding: "4px 8px" }}
+            style={{
+              border: BORDER,
+              textAlign: "center",
+              fontWeight: 700,
+              fontSize: 19,
+              padding: "4px 8px",
+            }}
             colSpan={cols - 1}
           >
             {title}
@@ -99,9 +109,13 @@ function Section({
           <td style={{ border: BORDER, textAlign: "center", fontWeight: 700, padding: "4px 8px" }}>
             Situação
           </td>
-          <td style={{ border: BORDER, fontWeight: 700, padding: "4px 8px" }}>Frente de Operação</td>
+          <td style={{ border: BORDER, fontWeight: 700, padding: "4px 8px" }}>
+            Frente de Operação
+          </td>
           {showParking ? (
-            <td style={{ border: BORDER, textAlign: "center", fontWeight: 700, padding: "4px 8px" }}>
+            <td
+              style={{ border: BORDER, textAlign: "center", fontWeight: 700, padding: "4px 8px" }}
+            >
               Frente de estacionamento
             </td>
           ) : null}
@@ -110,7 +124,14 @@ function Section({
           const st = SITUATION_DOC_STYLE[l.situation];
           return (
             <tr key={l.id}>
-              <td style={{ border: BORDER, fontWeight: 700, padding: "3px 8px", whiteSpace: "nowrap" }}>
+              <td
+                style={{
+                  border: BORDER,
+                  fontWeight: 700,
+                  padding: "3px 8px",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
                   <EquipmentIcon prefix={l.type_prefix} size={16} />
                   <span>

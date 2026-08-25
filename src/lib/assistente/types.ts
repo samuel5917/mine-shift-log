@@ -6,7 +6,8 @@ export type PlantaMotivo =
   | "Orientação operacional"
   | "Outro";
 
-export type Planta02Status = "Atendido" | "Atendido parcialmente" | "Não atendido" | "Não se aplica";
+export type Planta02Status =
+  "Atendido" | "Atendido parcialmente" | "Não atendido" | "Não se aplica";
 
 export interface PlantaEntry {
   movimentacao: "sem" | "com" | "";

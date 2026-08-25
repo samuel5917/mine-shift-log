@@ -19,10 +19,7 @@ export default function LightningMap({ flashes }: { flashes: Flash[] }) {
     const el = containerRef.current;
     if (!el || mapRef.current) return;
 
-    const center: L.LatLngExpression = [
-      OPERATION_LOCATION.latitude,
-      OPERATION_LOCATION.longitude,
-    ];
+    const center: L.LatLngExpression = [OPERATION_LOCATION.latitude, OPERATION_LOCATION.longitude];
     const map = L.map(el, { center, zoom: 10, scrollWheelZoom: true });
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap",

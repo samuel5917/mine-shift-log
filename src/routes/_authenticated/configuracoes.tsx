@@ -6,12 +6,7 @@ import { Bot, Moon, Sun, Wrench } from "lucide-react";
 import { applyTheme, getStoredTheme, type Theme } from "@/lib/theme";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  deleteAiKey,
-  getAiStatus,
-  saveAiKey,
-  testAiConnection,
-} from "@/lib/ai/gemini.functions";
+import { deleteAiKey, getAiStatus, saveAiKey, testAiConnection } from "@/lib/ai/gemini.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +17,10 @@ export const Route = createFileRoute("/_authenticated/configuracoes")({
   head: () => ({
     meta: [
       { title: "Configurações | Informe de Turno" },
-      { name: "description", content: "Ajuste seu nome, senha, tipos de equipamento e a logo do relatório." },
+      {
+        name: "description",
+        content: "Ajuste seu nome, senha, tipos de equipamento e a logo do relatório.",
+      },
       { property: "og:title", content: "Configurações | Informe de Turno" },
       { property: "og:description", content: "Ajuste sua conta e a logo do relatório." },
     ],
@@ -59,7 +57,10 @@ function ConfigPage() {
   const { data: types } = useQuery({
     queryKey: ["equipment_types"],
     queryFn: async () => {
-      const { data: rows, error } = await supabase.from("equipment_types").select("*").order("sort_order");
+      const { data: rows, error } = await supabase
+        .from("equipment_types")
+        .select("*")
+        .order("sort_order");
       if (error) throw error;
       return rows;
     },
@@ -204,7 +205,8 @@ function AppearanceCard() {
         <h2 className="font-semibold text-card-foreground">Aparência</h2>
       </div>
       <p className="text-sm text-muted-foreground">
-        Modo escuro está {theme === "dark" ? "ativado" : "desativado"}. A preferência é salva neste navegador.
+        Modo escuro está {theme === "dark" ? "ativado" : "desativado"}. A preferência é salva neste
+        navegador.
       </p>
       <Button variant="outline" onClick={toggleTheme}>
         {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
@@ -289,7 +291,9 @@ function AiSettingsCard() {
           id="gemini"
           type="password"
           autoComplete="off"
-          placeholder={data?.configured ? `Chave salva (${data.hint})` : "Cole sua API Key do Gemini"}
+          placeholder={
+            data?.configured ? `Chave salva (${data.hint})` : "Cole sua API Key do Gemini"
+          }
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
         />
@@ -298,7 +302,10 @@ function AiSettingsCard() {
         </p>
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button onClick={() => saveKey.mutate()} disabled={apiKey.trim().length < 10 || saveKey.isPending}>
+        <Button
+          onClick={() => saveKey.mutate()}
+          disabled={apiKey.trim().length < 10 || saveKey.isPending}
+        >
           Salvar API Key
         </Button>
         <Button variant="outline" onClick={testar} disabled={testing || !data?.configured}>

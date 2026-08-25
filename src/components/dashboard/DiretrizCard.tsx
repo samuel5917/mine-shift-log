@@ -47,7 +47,12 @@ export function DiretrizCard() {
             <Paperclip size={14} /> Anexar Diretriz
           </Button>
           {asset ? (
-            <Button size="icon" variant="ghost" aria-label="Remover Diretriz" onClick={() => del.mutate()}>
+            <Button
+              size="icon"
+              variant="ghost"
+              aria-label="Remover Diretriz"
+              onClick={() => del.mutate()}
+            >
               <Trash2 size={14} />
             </Button>
           ) : null}

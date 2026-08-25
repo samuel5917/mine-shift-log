@@ -2,12 +2,18 @@ import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Copy, Trash2, FilePlus2, ExternalLink } from "lucide-react";
+import { Copy, Trash2, FilePlus as FilePlus2, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -32,7 +38,10 @@ export const Route = createFileRoute("/_authenticated/informes")({
   head: () => ({
     meta: [
       { title: "Equipamentos | Informe de Turno" },
-      { name: "description", content: "Histórico de informes de turno criados, com duplicar e exportar." },
+      {
+        name: "description",
+        content: "Histórico de informes de turno criados, com duplicar e exportar.",
+      },
       { property: "og:title", content: "Equipamentos | Informe de Turno" },
       { property: "og:description", content: "Histórico de informes de turno criados." },
     ],
@@ -121,7 +130,9 @@ function InformesPage() {
           <tbody className="divide-y">
             {(reports ?? []).map((r) => (
               <tr key={r.id}>
-                <td className="px-4 py-2 font-medium text-card-foreground">{formatDateBR(r.report_date)}</td>
+                <td className="px-4 py-2 font-medium text-card-foreground">
+                  {formatDateBR(r.report_date)}
+                </td>
                 <td className="px-4 py-2">{SHIFT_LABEL[r.shift]}</td>
                 <td className="px-4 py-2">{r.shift_report_equipment?.length ?? 0}</td>
                 <td className="px-4 py-2 text-muted-foreground">
@@ -190,7 +201,10 @@ function InformesPage() {
               </div>
               <div className="space-y-2">
                 <Label>Turno</Label>
-                <Select value={creating.shift} onValueChange={(v) => setCreating({ ...creating, shift: v })}>
+                <Select
+                  value={creating.shift}
+                  onValueChange={(v) => setCreating({ ...creating, shift: v })}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -262,7 +276,9 @@ function InformesPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={() => deleting && remove.mutate(deleting)}>Excluir</AlertDialogAction>
+            <AlertDialogAction onClick={() => deleting && remove.mutate(deleting)}>
+              Excluir
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -2,35 +2,24 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "./types";
 
 function isNewSupabaseApiKey(value: string): boolean {
-  return (
-    value.startsWith("sb_publishable_") ||
-    value.startsWith("sb_secret_")
-  );
+  return value.startsWith("sb_publishable_") || value.startsWith("sb_secret_");
 }
 
-function createSupabaseFetch(
-  supabaseKey: string,
-): typeof fetch {
+function createSupabaseFetch(supabaseKey: string): typeof fetch {
   return (input, init) => {
     const headers = new Headers(
-      typeof Request !== "undefined" &&
-        input instanceof Request
-        ? input.headers
-        : undefined,
+      typeof Request !== "undefined" && input instanceof Request ? input.headers : undefined,
     );
 
     if (init?.headers) {
-      new Headers(init.headers).forEach(
-        (value, key) => {
-          headers.set(key, value);
-        },
-      );
+      new Headers(init.headers).forEach((value, key) => {
+        headers.set(key, value);
+      });
     }
 
     if (
       isNewSupabaseApiKey(supabaseKey) &&
-      headers.get("Authorization") ===
-        `Bearer ${supabaseKey}`
+      headers.get("Authorization") === `Bearer ${supabaseKey}`
     ) {
       headers.delete("Authorization");
     }
@@ -45,11 +34,9 @@ function createSupabaseFetch(
 }
 
 function getServerSupabaseConfig() {
-  const url = process.env.SUPABASE_URL;
+  const url = process.env["SUPABASE_URL"];
 
-  const adminKey =
-    process.env.SUPABASE_SECRET_KEY ||
-    process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const adminKey = process.env["SUPABASE_SECRET_KEY"] || process.env["SUPABASE_SERVICE_ROLE_KEY"];
 
   if (!url || !adminKey) {
     const missing: string[] = [];
@@ -59,9 +46,7 @@ function getServerSupabaseConfig() {
     }
 
     if (!adminKey) {
-      missing.push(
-        "SUPABASE_SECRET_KEY ou SUPABASE_SERVICE_ROLE_KEY",
-      );
+      missing.push("SUPABASE_SECRET_KEY ou SUPABASE_SERVICE_ROLE_KEY");
     }
 
     throw new Error(
@@ -80,46 +65,29 @@ function getServerSupabaseConfig() {
 }
 
 function createSupabaseAdminClient() {
-  const { url, adminKey } =
-    getServerSupabaseConfig();
+  const { url, adminKey } = getServerSupabaseConfig();
 
-  return createClient<Database>(
-    url,
-    adminKey,
-    {
-      global: {
-        fetch: createSupabaseFetch(adminKey),
-      },
-
-      auth: {
-        storage: undefined,
-        persistSession: false,
-        autoRefreshToken: false,
-      },
+  return createClient<Database>(url, adminKey, {
+    global: {
+      fetch: createSupabaseFetch(adminKey),
     },
-  );
+
+    auth: {
+      storage: undefined,
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+  });
 }
 
-let supabaseAdminInstance:
-  | ReturnType<typeof createSupabaseAdminClient>
-  | undefined;
+let supabaseAdminInstance: ReturnType<typeof createSupabaseAdminClient> | undefined;
 
-export const supabaseAdmin = new Proxy(
-  {} as ReturnType<
-    typeof createSupabaseAdminClient
-  >,
-  {
-    get(_, prop, receiver) {
-      if (!supabaseAdminInstance) {
-        supabaseAdminInstance =
-          createSupabaseAdminClient();
-      }
+export const supabaseAdmin = new Proxy({} as ReturnType<typeof createSupabaseAdminClient>, {
+  get(_, prop, receiver) {
+    if (!supabaseAdminInstance) {
+      supabaseAdminInstance = createSupabaseAdminClient();
+    }
 
-      return Reflect.get(
-        supabaseAdminInstance,
-        prop,
-        receiver,
-      );
-    },
+    return Reflect.get(supabaseAdminInstance, prop, receiver);
   },
-);
+});

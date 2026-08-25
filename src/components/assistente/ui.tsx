@@ -142,7 +142,9 @@ export function SectionCard({
     <section className="rounded-lg border bg-card">
       <header className="flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3">
         <div>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-card-foreground">{title}</h2>
+          <h2 className="text-sm font-bold uppercase tracking-wide text-card-foreground">
+            {title}
+          </h2>
           {description ? <p className="text-xs text-muted-foreground">{description}</p> : null}
         </div>
         {action}

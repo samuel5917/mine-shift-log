@@ -158,7 +158,15 @@ export function emptyComunicado(): Comunicado {
   };
 }
 export function emptyPonto(): PontoImportante {
-  return { id: newId(), titulo: "", responsavel: "", meio: "", decisao: "", condicao: "", acao: "" };
+  return {
+    id: newId(),
+    titulo: "",
+    responsavel: "",
+    meio: "",
+    decisao: "",
+    condicao: "",
+    acao: "",
+  };
 }
 
 export function emptyAta(): AtaState {

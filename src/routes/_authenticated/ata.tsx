@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { FileDown, FileText, Plus, RotateCcw, ShieldCheck, Wand2 } from "lucide-react";
+import { FileDown, FileText, Plus, RotateCcw, ShieldCheck, Wand as Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -120,7 +120,12 @@ function AtaPage() {
   }
 
   function novaAta() {
-    if (!window.confirm("Tem certeza que deseja iniciar uma nova ata? O rascunho atual será substituído.")) return;
+    if (
+      !window.confirm(
+        "Tem certeza que deseja iniciar uma nova ata? O rascunho atual será substituído.",
+      )
+    )
+      return;
     const s = emptyAta();
     setState(s);
     setPreview("");
@@ -146,10 +151,18 @@ function AtaPage() {
       <section className="rounded-lg border bg-card p-4">
         <div className="grid gap-3 sm:grid-cols-3">
           <Field label="Data">
-            <Input type="date" value={state.data} onChange={(e) => patch({ data: e.target.value })} />
+            <Input
+              type="date"
+              value={state.data}
+              onChange={(e) => patch({ data: e.target.value })}
+            />
           </Field>
           <Field label="Hora">
-            <Input type="time" value={state.hora} onChange={(e) => patch({ hora: e.target.value })} />
+            <Input
+              type="time"
+              value={state.hora}
+              onChange={(e) => patch({ hora: e.target.value })}
+            />
           </Field>
           <Field label="Próxima reunião (data)">
             <Input
@@ -455,7 +468,9 @@ function AtaPage() {
               <Field label="Equipamentos envolvidos">
                 <Input
                   value={c.equipamentos}
-                  onChange={(e) => updateItem("comunicados", c.id, { equipamentos: e.target.value })}
+                  onChange={(e) =>
+                    updateItem("comunicados", c.id, { equipamentos: e.target.value })
+                  }
                 />
               </Field>
               <Field label="Atividade">

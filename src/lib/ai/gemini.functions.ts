@@ -1,10 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import {
-  AI_SYSTEM_PROMPT,
-  buildUserPrompt,
-  type AiDocKind,
-} from "./prompt";
+import { AI_SYSTEM_PROMPT, buildUserPrompt, type AiDocKind } from "./prompt";
 
 /**
  * OpenRouter
@@ -14,8 +10,7 @@ import {
  */
 const OPENROUTER_MODEL = "openrouter/free";
 
-const OPENROUTER_ENDPOINT =
-  "https://openrouter.ai/api/v1/chat/completions";
+const OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
 
 /** Status da configuração — nunca retorna a chave. */
 export const getAiStatus = createServerFn({ method: "GET" })
@@ -47,21 +42,17 @@ export const saveAiKey = createServerFn({ method: "POST" })
   }))
   .handler(async ({ data, context }) => {
     if (data.apiKey.length < 10) {
-      throw new Error(
-        "Informe uma API Key válida do OpenRouter.",
-      );
+      throw new Error("Informe uma API Key válida do OpenRouter.");
     }
 
-    const { error } = await context.supabase
-      .from("ai_settings")
-      .upsert(
-        {
-          user_id: context.userId,
-          provider: "openrouter",
-          api_key: data.apiKey,
-        },
-        { onConflict: "user_id" },
-      );
+    const { error } = await context.supabase.from("ai_settings").upsert(
+      {
+        user_id: context.userId,
+        provider: "openrouter",
+        api_key: data.apiKey,
+      },
+      { onConflict: "user_id" },
+    );
 
     if (error) {
       throw new Error(error.message);
@@ -106,10 +97,7 @@ type AiSupabase = {
 /**
  * Carrega a API Key do usuário.
  */
-async function loadKey(
-  supabase: AiSupabase,
-  userId: string,
-) {
+async function loadKey(supabase: AiSupabase, userId: string) {
   const { data } = await supabase
     .from("ai_settings")
     .select("api_key")
@@ -130,10 +118,7 @@ async function loadKey(
 /**
  * Chama o OpenRouter.
  */
-async function callOpenRouter(
-  key: string,
-  userPrompt: string,
-) {
+async function callOpenRouter(key: string, userPrompt: string) {
   const res = await fetch(OPENROUTER_ENDPOINT, {
     method: "POST",
 
@@ -173,18 +158,9 @@ async function callOpenRouter(
   const responseText = await res.text();
 
   if (!res.ok) {
-    console.error(
-      "[OpenRouter] erro",
-      res.status,
-      responseText.slice(0, 2000),
-    );
+    console.error("[OpenRouter] erro", res.status, responseText.slice(0, 2000));
 
-    throw new Error(
-      `OpenRouter retornou erro ${res.status}: ${responseText.slice(
-        0,
-        800,
-      )}`,
-    );
+    throw new Error(`OpenRouter retornou erro ${res.status}: ${responseText.slice(0, 800)}`);
   }
 
   let json: {
@@ -198,29 +174,17 @@ async function callOpenRouter(
   try {
     json = JSON.parse(responseText);
   } catch {
-    console.error(
-      "[OpenRouter] resposta inválida:",
-      responseText,
-    );
+    console.error("[OpenRouter] resposta inválida:", responseText);
 
-    throw new Error(
-      "O OpenRouter retornou uma resposta inválida.",
-    );
+    throw new Error("O OpenRouter retornou uma resposta inválida.");
   }
 
-  const text =
-    json.choices?.[0]?.message?.content
-      ?.trim() ?? "";
+  const text = json.choices?.[0]?.message?.content?.trim() ?? "";
 
   if (!text) {
-    console.error(
-      "[OpenRouter] resposta sem conteúdo:",
-      json,
-    );
+    console.error("[OpenRouter] resposta sem conteúdo:", json);
 
-    throw new Error(
-      "O OpenRouter não retornou um texto válido.",
-    );
+    throw new Error("O OpenRouter não retornou um texto válido.");
   }
 
   return text;
@@ -234,15 +198,9 @@ export const testAiConnection = createServerFn({
 })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const key = await loadKey(
-      context.supabase as unknown as AiSupabase,
-      context.userId,
-    );
+    const key = await loadKey(context.supabase as unknown as AiSupabase, context.userId);
 
-    await callOpenRouter(
-      key,
-      "Responda apenas com: OK",
-    );
+    await callOpenRouter(key, "Responda apenas com: OK");
 
     return { ok: true };
   });
@@ -255,50 +213,24 @@ export const reviewWithAi = createServerFn({
 })
   .middleware([requireSupabaseAuth])
   .inputValidator(
-    (input: {
-      kind: AiDocKind;
-      structured?: string;
-      current?: string;
-      raw?: string;
-    }) => ({
-      kind:
-        input.kind === "ata"
-          ? ("ata" as const)
-          : ("assistente" as const),
+    (input: { kind: AiDocKind; structured?: string; current?: string; raw?: string }) => ({
+      kind: input.kind === "ata" ? ("ata" as const) : ("assistente" as const),
 
-      structured: String(
-        input.structured ?? "",
-      ).slice(0, 20000),
+      structured: String(input.structured ?? "").slice(0, 20000),
 
-      current: String(
-        input.current ?? "",
-      ).slice(0, 20000),
+      current: String(input.current ?? "").slice(0, 20000),
 
-      raw: String(
-        input.raw ?? "",
-      ).slice(0, 20000),
+      raw: String(input.raw ?? "").slice(0, 20000),
     }),
   )
   .handler(async ({ data, context }) => {
-    if (
-      !data.structured.trim() &&
-      !data.current.trim() &&
-      !data.raw.trim()
-    ) {
-      throw new Error(
-        "Preencha os dados do informe ou cole um texto bruto para revisar.",
-      );
+    if (!data.structured.trim() && !data.current.trim() && !data.raw.trim()) {
+      throw new Error("Preencha os dados do informe ou cole um texto bruto para revisar.");
     }
 
-    const key = await loadKey(
-      context.supabase as unknown as AiSupabase,
-      context.userId,
-    );
+    const key = await loadKey(context.supabase as unknown as AiSupabase, context.userId);
 
-    const texto = await callOpenRouter(
-      key,
-      buildUserPrompt(data),
-    );
+    const texto = await callOpenRouter(key, buildUserPrompt(data));
 
     return { texto };
   });

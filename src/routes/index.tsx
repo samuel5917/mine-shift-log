@@ -92,8 +92,8 @@ function Landing() {
         </h1>
 
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground animate-fade-in-up stagger-3">
-          Controle a situação da frota, registre as frentes de operação e exporte o informe do turno em
-          segundos.
+          Controle a situação da frota, registre as frentes de operação e exporte o informe do turno
+          em segundos.
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-4 animate-fade-in-up stagger-4">

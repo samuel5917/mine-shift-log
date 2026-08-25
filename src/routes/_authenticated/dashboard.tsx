@@ -16,12 +16,14 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
       { title: "Dashboard | Informe de Turno" },
       {
         name: "description",
-        content: "Manutenção, tarefas do turno, Blend, Diretriz e atividade de raios em um só painel.",
+        content:
+          "Manutenção, tarefas do turno, Blend, Diretriz e atividade de raios em um só painel.",
       },
       { property: "og:title", content: "Dashboard | Informe de Turno" },
       {
         property: "og:description",
-        content: "Manutenção, tarefas do turno, Blend, Diretriz e atividade de raios em um só painel.",
+        content:
+          "Manutenção, tarefas do turno, Blend, Diretriz e atividade de raios em um só painel.",
       },
     ],
   }),
@@ -35,7 +37,11 @@ function Dashboard() {
     queryKey: ["profile"],
     queryFn: async () => {
       const { data: auth } = await supabase.auth.getUser();
-      const { data } = await supabase.from("profiles").select("*").eq("id", auth.user!.id).maybeSingle();
+      const { data } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", auth.user!.id)
+        .maybeSingle();
       return { profile: data, email: auth.user?.email ?? "" };
     },
   });

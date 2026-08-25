@@ -66,7 +66,8 @@ function plantaTexto(p: PlantaInfo) {
   const partes: string[] = [];
   if (nome && situacao) {
     if (situacao === "parada") partes.push(`A ${nome} encontra-se parada`);
-    else if (situacao === "aguardando material") partes.push(`A ${nome} encontra-se aguardando material`);
+    else if (situacao === "aguardando material")
+      partes.push(`A ${nome} encontra-se aguardando material`);
     else if (situacao === "transferência de material")
       partes.push(`A ${nome} está realizando transferência de material`);
     else partes.push(`A ${nome} está ${situacao}`);

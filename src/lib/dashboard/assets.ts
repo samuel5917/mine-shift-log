@@ -30,9 +30,7 @@ export async function fetchAsset(kind: AssetKind): Promise<DashboardAsset | null
   if (error) throw error;
   if (!data) return null;
 
-  const { data: signed } = await supabase.storage
-    .from(BUCKET)
-    .createSignedUrl(data.path, 60 * 60);
+  const { data: signed } = await supabase.storage.from(BUCKET).createSignedUrl(data.path, 60 * 60);
 
   return {
     kind,

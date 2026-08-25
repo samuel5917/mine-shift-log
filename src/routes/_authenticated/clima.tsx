@@ -62,7 +62,9 @@ function Clima() {
         </Button>
       </div>
 
-      <div className={`rounded-lg px-4 py-3 text-base font-semibold ${LIGHTNING_STATUS_CLASS[status]}`}>
+      <div
+        className={`rounded-lg px-4 py-3 text-base font-semibold ${LIGHTNING_STATUS_CLASS[status]}`}
+      >
         {LIGHTNING_STATUS_DOT[status]} {LIGHTNING_STATUS_LABEL[status]}
         <span className="ml-2 text-sm font-normal opacity-90">
           {LIGHTNING_STATUS_DESCRIPTION[status]}
@@ -70,7 +72,10 @@ function Clima() {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label={`Descargas (${SINCE_MINUTES} min)`} value={failed ? "—" : String(data?.count ?? 0)} />
+        <Stat
+          label={`Descargas (${SINCE_MINUTES} min)`}
+          value={failed ? "—" : String(data?.count ?? 0)}
+        />
         <Stat
           label="Distância mais próxima"
           value={failed || data?.nearestKm == null ? "—" : `${data.nearestKm.toFixed(1)} km`}
@@ -89,8 +94,8 @@ function Clima() {
 
       <p className="text-xs text-muted-foreground">
         Círculos: vermelho ≤ {ALERT_DISTANCE_KM} km (alerta), amarelo ≤ {ATTENTION_DISTANCE_KM} km
-        (atenção), verde = limite de {MONITOR_RADIUS_KM} km. Os limites são parâmetros configuráveis e
-        não substituem o protocolo oficial de segurança.
+        (atenção), verde = limite de {MONITOR_RADIUS_KM} km. Os limites são parâmetros configuráveis
+        e não substituem o protocolo oficial de segurança.
       </p>
 
       <section className="rounded-lg border bg-card">
@@ -107,7 +112,9 @@ function Clima() {
           <ul className="divide-y">
             {flashes.slice(0, 20).map((f) => (
               <li key={f.id} className="flex items-center justify-between px-4 py-2 text-sm">
-                <span className="text-card-foreground">{f.distanceKm.toFixed(1)} km da operação</span>
+                <span className="text-card-foreground">
+                  {f.distanceKm.toFixed(1)} km da operação
+                </span>
                 <span className="text-muted-foreground">{formatTime(f.at, true)}</span>
               </li>
             ))}

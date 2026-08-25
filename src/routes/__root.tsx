@@ -81,7 +81,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Informe de Turno | Trindade Mineração" },
       {
         name: "description",
-        content: "Criação, gestão e exportação dos informes de turno de equipamentos da Trindade Mineração.",
+        content:
+          "Criação, gestão e exportação dos informes de turno de equipamentos da Trindade Mineração.",
       },
       { name: "author", content: "Trindade Mineração" },
       { property: "og:title", content: "Informe de Turno | Trindade Mineração" },
@@ -105,7 +106,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
-
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
@@ -132,4 +132,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-

@@ -27,7 +27,6 @@ REGRAS GERAIS:
 `;
 
 const FOCO: Record<AiDocKind, string> = {
-
   assistente: `
 TIPO DE DOCUMENTO: ASSISTENTE DE TURNO
 
@@ -201,21 +200,14 @@ export function buildUserPrompt(input: {
   current: string;
   raw: string;
 }) {
-  const parts: string[] = [
-    AI_SYSTEM_PROMPT,
-    FOCO[input.kind],
-  ];
+  const parts: string[] = [AI_SYSTEM_PROMPT, FOCO[input.kind]];
 
   if (input.structured.trim()) {
-    parts.push(
-      `DADOS ESTRUTURADOS PREENCHIDOS NO APLICATIVO:\n${input.structured.trim()}`,
-    );
+    parts.push(`DADOS ESTRUTURADOS PREENCHIDOS NO APLICATIVO:\n${input.structured.trim()}`);
   }
 
   if (input.current.trim()) {
-    parts.push(
-      `TEXTO ATUAL DO DOCUMENTO:\n${input.current.trim()}`,
-    );
+    parts.push(`TEXTO ATUAL DO DOCUMENTO:\n${input.current.trim()}`);
   }
 
   if (input.raw.trim()) {

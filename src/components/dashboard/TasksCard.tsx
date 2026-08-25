@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckSquare, Plus, Trash2 } from "lucide-react";
+import { SquareCheck as CheckSquare, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -134,7 +134,10 @@ export function TasksCard() {
               {done} de {list.length} concluída{list.length > 1 ? "s" : ""}
             </p>
             <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-              <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
+              <div
+                className="h-full rounded-full bg-primary transition-all"
+                style={{ width: `${pct}%` }}
+              />
             </div>
             <p className="text-right text-xs text-muted-foreground">{pct}%</p>
           </div>

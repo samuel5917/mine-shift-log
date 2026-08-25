@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BarChart3, Maximize2, Minus, Paperclip, Plus, RotateCcw, Trash2 } from "lucide-react";
+import { ChartBar as BarChart3, Maximize2, Minus, Paperclip, Plus, RotateCcw, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -69,7 +69,12 @@ export function BlendCard() {
             <Paperclip size={14} /> Anexar imagem
           </Button>
           {asset ? (
-            <Button size="icon" variant="ghost" aria-label="Remover Blend" onClick={() => del.mutate()}>
+            <Button
+              size="icon"
+              variant="ghost"
+              aria-label="Remover Blend"
+              onClick={() => del.mutate()}
+            >
               <Trash2 size={14} />
             </Button>
           ) : null}
@@ -98,7 +103,11 @@ export function BlendCard() {
               className="block w-full overflow-hidden rounded-md border bg-background"
               aria-label="Ampliar Blend"
             >
-              <img src={asset.url} alt="Blend do turno" className="max-h-40 w-full object-contain" />
+              <img
+                src={asset.url}
+                alt="Blend do turno"
+                className="max-h-40 w-full object-contain"
+              />
             </button>
             <div className="flex items-center justify-between gap-2">
               <span className="truncate text-xs text-muted-foreground">{asset.fileName}</span>
@@ -114,9 +123,7 @@ export function BlendCard() {
         )}
       </div>
 
-      {asset?.url ? (
-        <BlendViewer open={open} onOpenChange={setOpen} src={asset.url} />
-      ) : null}
+      {asset?.url ? <BlendViewer open={open} onOpenChange={setOpen} src={asset.url} /> : null}
     </section>
   );
 }
@@ -157,16 +164,31 @@ function BlendViewer({
       <DialogContent className="h-[95vh] w-[98vw] max-w-none gap-2 p-3 sm:max-w-none">
         <DialogTitle className="text-base">Blend</DialogTitle>
         <div className="flex items-center gap-2">
-          <Button size="icon" variant="outline" aria-label="Diminuir zoom" onClick={() => setZoom((z) => Math.max(0.5, z - 0.25))}>
+          <Button
+            size="icon"
+            variant="outline"
+            aria-label="Diminuir zoom"
+            onClick={() => setZoom((z) => Math.max(0.5, z - 0.25))}
+          >
             <Minus size={14} />
           </Button>
           <span className="w-14 text-center text-xs text-muted-foreground">
             {Math.round(zoom * 100)}%
           </span>
-          <Button size="icon" variant="outline" aria-label="Aumentar zoom" onClick={() => setZoom((z) => Math.min(6, z + 0.25))}>
+          <Button
+            size="icon"
+            variant="outline"
+            aria-label="Aumentar zoom"
+            onClick={() => setZoom((z) => Math.min(6, z + 0.25))}
+          >
             <Plus size={14} />
           </Button>
-          <Button size="icon" variant="ghost" aria-label="Redefinir zoom" onClick={() => setZoom(1)}>
+          <Button
+            size="icon"
+            variant="ghost"
+            aria-label="Redefinir zoom"
+            onClick={() => setZoom(1)}
+          >
             <RotateCcw size={14} />
           </Button>
         </div>

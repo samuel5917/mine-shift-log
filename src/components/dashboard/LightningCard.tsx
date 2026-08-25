@@ -36,7 +36,9 @@ export function LightningCard() {
       </div>
 
       <div className="space-y-3 p-4">
-        <div className={`rounded-md px-3 py-2 text-sm font-semibold ${LIGHTNING_STATUS_CLASS[status]}`}>
+        <div
+          className={`rounded-md px-3 py-2 text-sm font-semibold ${LIGHTNING_STATUS_CLASS[status]}`}
+        >
           {LIGHTNING_STATUS_DOT[status]} {LIGHTNING_STATUS_LABEL[status]}
         </div>
         <p className="text-xs text-muted-foreground">{LIGHTNING_STATUS_DESCRIPTION[status]}</p>
@@ -55,11 +57,12 @@ export function LightningCard() {
         </dl>
 
         <p className="text-xs text-muted-foreground">
-          {OPERATION_LOCATION.name} · raio de {MONITOR_RADIUS_KM} km · alerta ≤ {ALERT_DISTANCE_KM} km ·
-          atenção ≤ {ATTENTION_DISTANCE_KM} km
+          {OPERATION_LOCATION.name} · raio de {MONITOR_RADIUS_KM} km · alerta ≤ {ALERT_DISTANCE_KM}{" "}
+          km · atenção ≤ {ATTENTION_DISTANCE_KM} km
         </p>
         <p className="text-xs text-muted-foreground">
-          Última descarga: {formatTime(data?.lastFlashAt)} · Atualizado às {formatTime(data?.updatedAt)}
+          Última descarga: {formatTime(data?.lastFlashAt)} · Atualizado às{" "}
+          {formatTime(data?.updatedAt)}
         </p>
 
         <Button size="sm" variant="outline" className="w-full" asChild>

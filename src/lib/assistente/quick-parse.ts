@@ -1,9 +1,4 @@
-import {
-  emptyBanco,
-  emptyMovimentacao,
-  type BancoEntry,
-  type MovimentacaoEntry,
-} from "./types";
+import { emptyBanco, emptyMovimentacao, type BancoEntry, type MovimentacaoEntry } from "./types";
 
 function normalizeBanco(raw: string): string {
   const m = raw.match(/^b[-\s]?(\d{3,4})$/i);
@@ -45,7 +40,9 @@ export function parseQuickEntry(input: string): QuickResult {
   const text = input.trim();
   if (!text) return { kind: null, faltando: [] };
 
-  const tipoMatch = text.match(/^(om|reprocesso|estoque|aterro|lastro|conforma\w*|retalud\w*|rampa)\b/i);
+  const tipoMatch = text.match(
+    /^(om|reprocesso|estoque|aterro|lastro|conforma\w*|retalud\w*|rampa)\b/i,
+  );
   if (tipoMatch) {
     const tipoRaw = tipoMatch[1]!.toLowerCase();
     const tipo =
@@ -63,7 +60,9 @@ export function parseQuickEntry(input: string): QuickResult {
     const mov = emptyMovimentacao(tipo);
     const faltando: string[] = [];
 
-    const rota = rest.match(/(b[-\s]?\d{3,4}|planta\s*0?\d)\s*(?:x|-|para|>)\s*(b[-\s]?\d{3,4}|planta\s*0?\d)/i);
+    const rota = rest.match(
+      /(b[-\s]?\d{3,4}|planta\s*0?\d)\s*(?:x|-|para|>)\s*(b[-\s]?\d{3,4}|planta\s*0?\d)/i,
+    );
     if (rota) {
       mov.origem = /planta/i.test(rota[1]!) ? capPlanta(rota[1]!) : normalizeBanco(rota[1]!);
       mov.destino = /planta/i.test(rota[2]!) ? capPlanta(rota[2]!) : normalizeBanco(rota[2]!);

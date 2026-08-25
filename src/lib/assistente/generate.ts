@@ -143,9 +143,10 @@ function plantaTexto(p: PlantaEntry, rotulo: string): string {
 }
 
 export function bancoTexto(b: BancoEntry): string {
-  const blocos = [plantaTexto(b.planta01, "Planta 01"), plantaTexto(b.planta02, "Planta 02")].filter(
-    Boolean,
-  );
+  const blocos = [
+    plantaTexto(b.planta01, "Planta 01"),
+    plantaTexto(b.planta02, "Planta 02"),
+  ].filter(Boolean);
   if (blocos.length === 0 && b.reiniciado !== "sim") return "";
 
   let texto = `${b.banco || "Banco não informado"}: ${blocos.join(" ")}`.trim();

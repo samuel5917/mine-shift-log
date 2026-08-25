@@ -25,14 +25,23 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { EquipmentIcon } from "@/components/EquipmentIcon";
 
 export const Route = createFileRoute("/_authenticated/equipamentos")({
   head: () => ({
     meta: [
       { title: "Equipamentos | Informe de Turno" },
-      { name: "description", content: "Cadastro de equipamentos da frota: código, nome, tipo e status." },
+      {
+        name: "description",
+        content: "Cadastro de equipamentos da frota: código, nome, tipo e status.",
+      },
       { property: "og:title", content: "Equipamentos | Informe de Turno" },
       { property: "og:description", content: "Cadastro de equipamentos da frota de mineração." },
     ],
@@ -60,7 +69,10 @@ function EquipamentosPage() {
   const { data: types } = useQuery({
     queryKey: ["equipment_types"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("equipment_types").select("*").order("sort_order");
+      const { data, error } = await supabase
+        .from("equipment_types")
+        .select("*")
+        .order("sort_order");
       if (error) throw error;
       return data;
     },
@@ -94,7 +106,12 @@ function EquipamentosPage() {
       if (state.id) {
         const { error } = await supabase
           .from("equipments")
-          .update({ code: state.code, name: state.name, type_id: state.type_id, active: state.active })
+          .update({
+            code: state.code,
+            name: state.name,
+            type_id: state.type_id,
+            active: state.active,
+          })
           .eq("id", state.id);
         if (error) throw error;
       } else {
@@ -151,7 +168,6 @@ function EquipamentosPage() {
       if (!a || !b) return;
       await supabase.from("equipments").update({ display_order: b.display_order }).eq("id", a.id);
       await supabase.from("equipments").update({ display_order: a.display_order }).eq("id", b.id);
-
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["equipments"] }),
   });
@@ -167,7 +183,10 @@ function EquipamentosPage() {
 
       <div className="flex flex-wrap gap-3">
         <div className="relative min-w-56 flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            size={16}
+          />
           <Input
             className="pl-9"
             placeholder="Pesquisar equipamento..."
@@ -218,10 +237,18 @@ function EquipamentosPage() {
                 </td>
                 <td className="px-4 py-2">
                   <div className="flex justify-end gap-1">
-                    <Button size="icon" variant="ghost" onClick={() => move.mutate({ id: e.id, direction: -1 })}>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => move.mutate({ id: e.id, direction: -1 })}
+                    >
                       <ArrowUp size={15} />
                     </Button>
-                    <Button size="icon" variant="ghost" onClick={() => move.mutate({ id: e.id, direction: 1 })}>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => move.mutate({ id: e.id, direction: 1 })}
+                    >
                       <ArrowDown size={15} />
                     </Button>
                     <Button
@@ -297,7 +324,10 @@ function EquipamentosPage() {
               </div>
               <div className="space-y-2">
                 <Label>Tipo</Label>
-                <Select value={form.type_id} onValueChange={(v) => setForm({ ...form, type_id: v })}>
+                <Select
+                  value={form.type_id}
+                  onValueChange={(v) => setForm({ ...form, type_id: v })}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
@@ -336,7 +366,8 @@ function EquipamentosPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Tem certeza que deseja excluir este equipamento?</AlertDialogTitle>
             <AlertDialogDescription>
-              O equipamento {deleting?.code} será removido do cadastro. Informes já criados serão mantidos.
+              O equipamento {deleting?.code} será removido do cadastro. Informes já criados serão
+              mantidos.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

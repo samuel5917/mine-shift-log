@@ -16,7 +16,10 @@ export const Route = createFileRoute("/auth")({
       { title: "Entrar | Informe de Turno" },
       { name: "description", content: "Acesse sua conta para gerenciar os informes de turno." },
       { property: "og:title", content: "Entrar | Informe de Turno" },
-      { property: "og:description", content: "Acesse sua conta para gerenciar os informes de turno." },
+      {
+        property: "og:description",
+        content: "Acesse sua conta para gerenciar os informes de turno.",
+      },
       { name: "robots", content: "noindex" },
     ],
   }),

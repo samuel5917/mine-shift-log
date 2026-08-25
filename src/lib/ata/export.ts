@@ -13,15 +13,8 @@ function download(blob: Blob, filename: string) {
 }
 
 export async function baixarDocx(state: AtaState) {
-  const {
-    Document,
-    Packer,
-    Paragraph,
-    TextRun,
-    AlignmentType,
-    LevelFormat,
-    PageOrientation,
-  } = await import("docx");
+  const { Document, Packer, Paragraph, TextRun, AlignmentType, LevelFormat, PageOrientation } =
+    await import("docx");
 
   const children: InstanceType<typeof Paragraph>[] = [];
 
@@ -52,7 +45,10 @@ export async function baixarDocx(state: AtaState) {
     children.push(
       new Paragraph({
         spacing: { after: 60 },
-        children: [new TextRun({ text: "HORA: ", bold: true }), new TextRun(formatHora(state.hora))],
+        children: [
+          new TextRun({ text: "HORA: ", bold: true }),
+          new TextRun(formatHora(state.hora)),
+        ],
       }),
     );
 

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus, Wand2, Zap, BookmarkPlus } from "lucide-react";
+import { Plus, Wand as Wand2, Zap, BookmarkPlus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -81,9 +81,8 @@ function Assistente() {
   const [openObs, setOpenObs] = useState<string | null>(null);
   const [openModelo, setOpenModelo] = useState<string | null>(null);
 
-  const toggleOpen =
-    (current: string | null, set: (v: string | null) => void) => (id: string) =>
-      set(current === id ? null : id);
+  const toggleOpen = (current: string | null, set: (v: string | null) => void) => (id: string) =>
+    set(current === id ? null : id);
 
   useEffect(() => {
     setState(loadState());
@@ -384,7 +383,14 @@ function Assistente() {
                 selected={b.reiniciado === "sim" ? ["Sim"] : b.reiniciado === "nao" ? ["Não"] : []}
                 onToggle={(v) =>
                   updateBanco(b.id, {
-                    reiniciado: v === "Sim" ? (b.reiniciado === "sim" ? "" : "sim") : b.reiniciado === "nao" ? "" : "nao",
+                    reiniciado:
+                      v === "Sim"
+                        ? b.reiniciado === "sim"
+                          ? ""
+                          : "sim"
+                        : b.reiniciado === "nao"
+                          ? ""
+                          : "nao",
                   })
                 }
               />
@@ -570,7 +576,11 @@ function Assistente() {
               ) : null}
               <div className="grid gap-3 sm:grid-cols-3">
                 <Field label="Início">
-                  <Input type="time" value={p.inicio} onChange={(e) => up({ inicio: e.target.value })} />
+                  <Input
+                    type="time"
+                    value={p.inicio}
+                    onChange={(e) => up({ inicio: e.target.value })}
+                  />
                 </Field>
                 <Field label="Fim">
                   <Input type="time" value={p.fim} onChange={(e) => up({ fim: e.target.value })} />
@@ -763,7 +773,11 @@ function Assistente() {
                 </Field>
               </div>
               <Field label="Texto padrão">
-                <Textarea value={mo.texto} onChange={(e) => up({ texto: e.target.value })} rows={2} />
+                <Textarea
+                  value={mo.texto}
+                  onChange={(e) => up({ texto: e.target.value })}
+                  rows={2}
+                />
               </Field>
               <CopyButton text={mo.texto} />
             </ExpandableCard>
